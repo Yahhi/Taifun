@@ -1,4 +1,4 @@
-package ru.develop_for_android.taifun.taifun.data;
+package ru.develop_for_android.taifun.data;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
@@ -10,7 +10,7 @@ import android.preference.PreferenceManager;
 
 import java.util.Date;
 
-import ru.develop_for_android.taifun.taifun.MyInfoViewModel;
+import ru.develop_for_android.taifun.MyInfoViewModel;
 
 @Entity(tableName = "orders", foreignKeys = @ForeignKey(entity = AddressEntry.class, parentColumns = "id", childColumns = "address_id"))
 public class OrderEntry {

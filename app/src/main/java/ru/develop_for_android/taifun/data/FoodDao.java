@@ -1,4 +1,4 @@
-package ru.develop_for_android.taifun.taifun.data;
+package ru.develop_for_android.taifun.data;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
@@ -10,7 +10,7 @@ import android.content.Context;
 
 import java.util.List;
 
-import static ru.develop_for_android.taifun.taifun.data.OrderEntry.UNFINISHED_ORDER_ID;
+import static ru.develop_for_android.taifun.data.OrderEntry.UNFINISHED_ORDER_ID;
 
 @Dao
 public abstract class FoodDao {

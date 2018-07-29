@@ -1,4 +1,4 @@
-package ru.develop_for_android.taifun.taifun;
+package ru.develop_for_android.taifun;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
@@ -9,8 +9,8 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
-import ru.develop_for_android.taifun.taifun.data.AddressEntry;
-import ru.develop_for_android.taifun.taifun.data.AppDatabase;
+import ru.develop_for_android.taifun.data.AddressEntry;
+import ru.develop_for_android.taifun.data.AppDatabase;
 
 public class MyInfoViewModel extends AndroidViewModel {
     public static final String NAME_KEY = "name";

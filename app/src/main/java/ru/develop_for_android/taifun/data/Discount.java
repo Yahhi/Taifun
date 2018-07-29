@@ -1,4 +1,4 @@
-package ru.develop_for_android.taifun.taifun.data;
+package ru.develop_for_android.taifun.data;
 
 import android.arch.persistence.room.ColumnInfo;
 

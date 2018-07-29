@@ -1,4 +1,4 @@
-package ru.develop_for_android.taifun.taifun;
+package ru.develop_for_android.taifun;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
@@ -12,9 +12,9 @@ import android.widget.ImageButton;
 
 import java.util.List;
 
-import ru.develop_for_android.taifun.taifun.data.AddressEntry;
-import ru.develop_for_android.taifun.taifun.data.AppDatabase;
-import ru.develop_for_android.taifun.taifun.data.AppExecutors;
+import ru.develop_for_android.taifun.data.AddressEntry;
+import ru.develop_for_android.taifun.data.AppDatabase;
+import ru.develop_for_android.taifun.data.AppExecutors;
 
 public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.ViewHolder> {
 

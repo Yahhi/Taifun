@@ -1,4 +1,4 @@
-package ru.develop_for_android.taifun.taifun;
+package ru.develop_for_android.taifun;
 
 
 import android.os.Bundle;
@@ -12,10 +12,10 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FoodListWithCategoriesFragment extends Fragment {
+public class PromoListFragment extends Fragment {
 
 
-    public FoodListWithCategoriesFragment() {
+    public PromoListFragment() {
         // Required empty public constructor
     }
 
@@ -24,7 +24,7 @@ public class FoodListWithCategoriesFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_food_list_with_categories, container, false);
+        return inflater.inflate(R.layout.fragment_promo_list, container, false);
     }
 
 }
