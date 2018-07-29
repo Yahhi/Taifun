@@ -2,8 +2,8 @@
     <string name="app_name">Taifun</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_title">Taifun</string>
+    <string name="nav_header_subtitle">+79231413131</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
@@ -13,4 +13,8 @@
     <string name="promo">Promo</string>
     <string name="orders">Orders</string>
     <string name="my_info">My info</string>
+    <string name="my_name">My name</string>
+    <string name="my_phone">My phone</string>
+    <string name="addresses">Addresses</string>
+    <string name="food_image">food image</string>
 </resources>

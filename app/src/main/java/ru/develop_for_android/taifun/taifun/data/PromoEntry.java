@@ -1,11 +1,8 @@
 package ru.develop_for_android.taifun.taifun.data;
 
 import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-
-import java.util.Date;
 
 @Entity(tableName = "promo")
 public class PromoEntry {

@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 
 @Database(entities = {CategoryEntry.class, FoodEntry.class, IngredientEntry.class,
             IngredientsInFoodEntry.class, OrderContent.class, OrderContentRemovedIngredients.class,
-            OrderEntry.class, PromoEntry.class, PromoActiveFoodEntry.class},
+            OrderEntry.class, PromoEntry.class, PromoActiveFoodEntry.class, AddressEntry.class},
         version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -32,7 +32,7 @@ public abstract class AppDatabase extends RoomDatabase {
                             public void onCreate(@NonNull SupportSQLiteDatabase db) {
                                 super.onCreate(db);
                                 Executors.newSingleThreadScheduledExecutor().execute(() ->
-                                        getInstance(context).foodDao().newOrder(OrderEntry.getNewOrder()));
+                                        getInstance(context).foodDao().newOrder(OrderEntry.getNewOrder(context)));
 
                             }
                         })

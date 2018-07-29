@@ -6,6 +6,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Transaction;
 import android.arch.persistence.room.Update;
+import android.content.Context;
 
 import java.util.List;
 
@@ -73,10 +74,10 @@ public abstract class FoodDao {
     abstract int getLastOrderId();
 
     @Transaction
-    public void finishOrder(OrderEntry unfinishedOrder) {
+    public void finishOrder(OrderEntry unfinishedOrder, Context context) {
         unfinishedOrder.id = getLastOrderId() + 1;
         updateOrderInfo(unfinishedOrder);
-        newOrder(OrderEntry.getNewOrder());
+        newOrder(OrderEntry.getNewOrder(context));
     }
 
     @Query("SELECT * FROM orders WHERE id = :id")
@@ -89,11 +90,38 @@ public abstract class FoodDao {
         return getOrderById(UNFINISHED_ORDER_ID);
     }
 
+    @Transaction
     @Query("SELECT * FROM orders WHERE id = :orderId")
     public abstract LiveData<OrderWithFood> getOrderWithContent(int orderId);
 
     @Query("SELECT * FROM promo")
     public abstract LiveData<List<PromoEntry>> getAllPromo();
+
+    @Query("SELECT * FROM address WHERE visible > 0 ORDER BY title")
+    public abstract LiveData<List<AddressEntry>> getActualAddresses();
+
+    @Query("SELECT * FROM address WHERE id = :id")
+    abstract AddressEntry getAddressById(int id);
+
+    @Insert
+    public abstract void addAddress(AddressEntry addressEntry);
+
+    @Update
+    abstract void saveAddress(AddressEntry addressEntry);
+
+    @Transaction
+    public void updateAddress(AddressEntry addressEntry) {
+        /*int oldId = addressEntry.id;
+        addAddress(addressEntry);
+        AddressEntry oldAddress = getAddressById(oldId);
+        oldAddress.visible = 0;*/
+        saveAddress(addressEntry);
+    }
+
+    public void makeAddressInvisible(AddressEntry addressEntry) {
+        addressEntry.visible = 0;
+        saveAddress(addressEntry);
+    }
 
     @Query("SELECT discount_currency, discount_percent FROM promo_food_inside LEFT JOIN promo ON promo_id = promo.id " +
             "WHERE food_item_id = :foodId OR food_category_id = :categoryId ORDER BY discount_currency DESC LIMIT 1")

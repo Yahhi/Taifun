@@ -2,11 +2,17 @@ package ru.develop_for_android.taifun.taifun.data;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import java.util.Date;
 
-@Entity(tableName = "orders")
+import ru.develop_for_android.taifun.taifun.MyInfoViewModel;
+
+@Entity(tableName = "orders", foreignKeys = @ForeignKey(entity = AddressEntry.class, parentColumns = "id", childColumns = "address_id"))
 public class OrderEntry {
     public static final int STATUS_NEW = 0;
     public static final int STATUS_PLACED = 1;
@@ -26,7 +32,8 @@ public class OrderEntry {
     @ColumnInfo(name = "schedule_stamp")
     Long scheduleStamp;
     int status = STATUS_NEW;
-    String address;
+    @ColumnInfo(name = "address_id")
+    int addressId;
     String phone;
     String person;
     String comment;
@@ -36,8 +43,8 @@ public class OrderEntry {
     @ColumnInfo(name = "delivery_price")
     Long deliveryPrice = 0L;
 
-    public OrderEntry(String address, String phone, String person, String comment) {
-        this.address = address;
+    public OrderEntry(int addressId, String phone, String person, String comment) {
+        this.addressId = addressId;
         this.phone = phone;
         this.person = person;
         this.comment = comment;
@@ -50,10 +57,6 @@ public class OrderEntry {
 
     public void setStatus(int status) {
         this.status = status;
-    }
-
-    public String getAddress() {
-        return address;
     }
 
     public String getPhone() {
@@ -92,8 +95,11 @@ public class OrderEntry {
         this.deliveryPrice = deliveryPrice;
     }
 
-    public static OrderEntry getNewOrder() {
-        OrderEntry order = new OrderEntry("", "", "", "");
+    public static OrderEntry getNewOrder(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        OrderEntry order = new OrderEntry(preferences.getInt(MyInfoViewModel.DEFAULT_ADDRESS_ID_KEY, 0),
+                preferences.getString(MyInfoViewModel.NAME_KEY, ""),
+                preferences.getString(MyInfoViewModel.PHONE_KEY, ""), "");
         order.id = UNFINISHED_ORDER_ID;
         return order;
     }
