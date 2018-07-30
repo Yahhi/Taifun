@@ -17,7 +17,7 @@ public class OrderContent {
     @PrimaryKey(autoGenerate = true)
     int id;
     @ColumnInfo(name = "food_id")
-    int foodId;
+    String foodId;
     int count;
     @ColumnInfo(name = "order_id")
     int orderId;
@@ -26,14 +26,14 @@ public class OrderContent {
     @ColumnInfo(name = "actual_discount")
     Long actualDiscount;
 
-    public OrderContent(int foodId, int orderId, Long actualPrice, Long actualDiscount) {
+    public OrderContent(String foodId, int orderId, Long actualPrice, Long actualDiscount) {
         this.foodId = foodId;
         this.orderId = orderId;
         this.actualPrice = actualPrice;
         this.actualDiscount = actualDiscount;
     }
 
-    public int getFoodId() {
+    public String getFoodId() {
         return foodId;
     }
 

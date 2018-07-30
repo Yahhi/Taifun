@@ -1,5 +1,6 @@
 package ru.develop_for_android.taifun;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -7,6 +8,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.JobIntentService;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,6 +18,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.crashlytics.android.Crashlytics;
+
+import ru.develop_for_android.taifun.networking.FoodSyncService;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -72,7 +76,11 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            long a = Long.parseLong("fe34");
+
+            Intent bundle = new Intent();
+            JobIntentService.enqueueWork(getBaseContext(),
+                    FoodSyncService.class, FoodSyncService.jobId,
+                    bundle);
         }
 
         return super.onOptionsItemSelected(item);

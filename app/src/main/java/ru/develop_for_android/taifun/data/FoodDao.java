@@ -3,6 +3,7 @@ package ru.develop_for_android.taifun.data;
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Transaction;
 import android.arch.persistence.room.Update;
@@ -15,19 +16,22 @@ import static ru.develop_for_android.taifun.data.OrderEntry.UNFINISHED_ORDER_ID;
 @Dao
 public abstract class FoodDao {
 
-    @Insert
-    abstract void addCategories(List<CategoryEntry> categoryEntry);
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    abstract void addCategories(CategoryEntry categoryEntry);
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     abstract void addFood(List<FoodEntry> foodEntry);
     @Insert
     abstract void addIngredients(List<IngredientEntry> ingredientEntry);
     @Insert
     abstract void addIngredientsInFood(List<IngredientsInFoodEntry> ingredients);
     @Transaction
-    public void addDownloadedFoodInfo(List<CategoryEntry> categoryEntries, List<FoodEntry> foodEntries,
-                               List<IngredientEntry> ingredients, List<IngredientsInFoodEntry> foodIngredients) {
+    public void addDownloadedFoodInfo(CategoryEntry categoryEntries, List<FoodEntry> foodEntries) {
         addCategories(categoryEntries);
         addFood(foodEntries);
+    }
+    @Transaction
+    public void addDownloadedIngredientsInfo(List<IngredientEntry> ingredients,
+                                             List<IngredientsInFoodEntry> foodIngredients) {
         addIngredients(ingredients);
         addIngredientsInFood(foodIngredients);
     }

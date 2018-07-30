@@ -16,9 +16,9 @@ public class IngredientsInFoodEntry {
     @ColumnInfo(name = "ingredient_id")
     int ingredientId;
     @ColumnInfo(name = "food_id")
-    int foodId;
+    String foodId;
 
-    public IngredientsInFoodEntry(int ingredientId, int foodId) {
+    public IngredientsInFoodEntry(int ingredientId, String foodId) {
         this.ingredientId = ingredientId;
         this.foodId = foodId;
     }

@@ -5,17 +5,18 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 @Entity (tableName = "food", indices = @Index("category_id"),
     foreignKeys = @ForeignKey(entity = CategoryEntry.class, parentColumns = "id", childColumns = "category_id"))
 public class FoodEntry {
-    @PrimaryKey(autoGenerate = true)
-    int id;
+    @PrimaryKey(autoGenerate = false)
+    @NonNull String id;
     @ColumnInfo(name = "category_id")
-    int categoryId;
+    String categoryId;
     String title;
     String description;
-    int weight;
+    long weight;
     @ColumnInfo(name = "weight_quantifier")
     String weightQuantifier;
     Long price;
@@ -24,7 +25,8 @@ public class FoodEntry {
     @ColumnInfo(name = "image_network")
     String imageAddressNetwork;
 
-    public FoodEntry(int categoryId, String title, String description, int weight, String weightQuantifier, Long price, String imageAddressNetwork) {
+    public FoodEntry(@NonNull String id, String categoryId, String title, String description, long weight, String weightQuantifier, Long price, String imageAddressNetwork) {
+        this.id = id;
         this.categoryId = categoryId;
         this.title = title;
         this.description = description;
@@ -42,7 +44,7 @@ public class FoodEntry {
         return description;
     }
 
-    public int getWeight() {
+    public long getWeight() {
         return weight;
     }
 
@@ -66,19 +68,11 @@ public class FoodEntry {
         this.imageAddressLocal = imageAddressLocal;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
     public String getReadableWeight() {
         return String.valueOf(weight) + " " + weightQuantifier;
-    }
-
-    int getCategoryId() {
-        return categoryId;
-    }
-
-    void setId(int id) {
-        this.id = id;
     }
 }

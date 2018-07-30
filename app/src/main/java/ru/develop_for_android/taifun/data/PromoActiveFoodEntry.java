@@ -5,6 +5,9 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
+
+import java.util.StringTokenizer;
 
 @Entity(tableName = "promo_food_inside",
         foreignKeys = {
@@ -13,20 +16,20 @@ import android.arch.persistence.room.PrimaryKey;
             @ForeignKey(entity = FoodEntry.class, parentColumns = "id", childColumns = "food_item_id")
         }, indices = {@Index("promo_id"), @Index("food_category_id"), @Index("food_item_id")})
 public class PromoActiveFoodEntry {
-    @PrimaryKey(autoGenerate = true)
-    int id;
+    @PrimaryKey(autoGenerate = false)
+    @NonNull String id;
     @ColumnInfo(name = "promo_id")
-    int promoId;
+    String promoId;
     @ColumnInfo(name = "food_category_id")
-    int foodCategoryId;
+    String foodCategoryId;
     @ColumnInfo(name = "food_item_id")
-    int foodItemId;
+    String foodItemId;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public int getPromoId() {
+    public String getPromoId() {
         return promoId;
     }
 }

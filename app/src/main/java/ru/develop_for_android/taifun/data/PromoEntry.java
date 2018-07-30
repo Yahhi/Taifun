@@ -3,11 +3,12 @@ package ru.develop_for_android.taifun.data;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 @Entity(tableName = "promo")
 public class PromoEntry {
-    @PrimaryKey(autoGenerate = true)
-    int id;
+    @PrimaryKey(autoGenerate = false)
+    @NonNull String id;
     String title;
     String description;
     @ColumnInfo(name = "start_date")
@@ -59,7 +60,7 @@ public class PromoEntry {
     @ColumnInfo(name = "image_network")
     String imageAddressNetwork;
 
-    public PromoEntry(int id, String title, String description, Long startDate, Long finishDate,
+    public PromoEntry(@NonNull String id, String title, String description, Long startDate, Long finishDate,
                       int discountInPercent, Long discountInCurrency, int sundayStartTime,
                       int sundayEndTime, int mondayStartTime, int mondayEndTime, int tuesdayStartTime,
                       int tuesdayEndTime, int wednesdayStartTime, int wednesdayEndTime,
