@@ -1,12 +1,20 @@
 package ru.develop_for_android.taifun;
 
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.List;
+
+import ru.develop_for_android.taifun.data.PromoEntry;
 
 
 /**
@@ -14,6 +22,7 @@ import android.view.ViewGroup;
  */
 public class PromoListFragment extends Fragment {
 
+    PromoAdapter adapter;
 
     public PromoListFragment() {
         // Required empty public constructor
@@ -23,8 +32,19 @@ public class PromoListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_promo_list, container, false);
+        View fragmentView = inflater.inflate(R.layout.fragment_promo_list, container, false);
+        RecyclerView recyclerView = fragmentView.findViewById(R.id.promo_list);
+        recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+        adapter = new PromoAdapter();
+        recyclerView.setAdapter(adapter);
+        setupViewModel();
+        return fragmentView;
+    }
+
+    private void setupViewModel() {
+        PromoListViewModel viewModel = ViewModelProviders.of(this).get(PromoListViewModel.class);
+        LiveData<List<PromoEntry>> promoEntries = viewModel.promoEntries;
+        promoEntries.observe(this, promoEntries1 -> adapter.initialize(promoEntries1));
     }
 
 }

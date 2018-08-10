@@ -24,7 +24,6 @@ import java.util.List;
 
 import ru.develop_for_android.taifun.data.AddressEntry;
 import ru.develop_for_android.taifun.data.AppDatabase;
-import ru.develop_for_android.taifun.data.AppExecutors;
 
 
 /**
@@ -97,12 +96,9 @@ public class MyInfoFragment extends Fragment {
             dialogBuilder.setView(input);
             dialogBuilder.setPositiveButton("Add", (dialog, which) -> {
                 AddressEntry newAddress = new AddressEntry(input.getText().toString(), "");
-                AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        AppDatabase.getInstance(requireContext()).foodDao().addAddress(newAddress);
-                        requireActivity().runOnUiThread(() -> setupViewModel());
-                    }
+                AppExecutors.getInstance().diskIO().execute(() -> {
+                    AppDatabase.getInstance(requireContext()).foodDao().addAddress(newAddress);
+                    requireActivity().runOnUiThread(this::setupViewModel);
                 });
             });
             dialogBuilder.setCancelable(true);

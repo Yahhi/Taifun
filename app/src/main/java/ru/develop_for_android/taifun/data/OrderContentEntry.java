@@ -13,7 +13,7 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
                 onUpdate = CASCADE, onDelete = CASCADE),
         @ForeignKey(entity = FoodEntry.class, parentColumns = "id", childColumns = "food_id")},
         indices = {@Index("food_id"), @Index("order_id")})
-public class OrderContent {
+public class OrderContentEntry {
     @PrimaryKey(autoGenerate = true)
     int id;
     @ColumnInfo(name = "food_id")
@@ -24,13 +24,14 @@ public class OrderContent {
     @ColumnInfo(name = "actual_price")
     Long actualPrice;
     @ColumnInfo(name = "actual_discount")
-    Long finalPrice;
+    Long actualDiscount;
 
-    public OrderContent(String foodId, int orderId, Long actualPrice, Long finalPrice) {
+    public OrderContentEntry(String foodId, int orderId, Long actualPrice, Long actualDiscount) {
         this.foodId = foodId;
         this.orderId = orderId;
         this.actualPrice = actualPrice;
-        this.finalPrice = finalPrice;
+        this.actualDiscount = actualDiscount;
+        count = 1;
     }
 
     public String getFoodId() {
@@ -41,8 +42,8 @@ public class OrderContent {
         return actualPrice;
     }
 
-    public Long getFinalPrice() {
-        return finalPrice;
+    public Long getActualDiscount() {
+        return actualDiscount;
     }
 
     public int getCount() {

@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 @Entity(tableName = "category",
         indices = {@Index("title")})
 public class CategoryEntry {
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey()
     @NonNull private String id;
     String title;
 
@@ -21,11 +21,12 @@ public class CategoryEntry {
         return title;
     }
 
-    String getId() {
+    @NonNull
+    public String getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(@NonNull String id) {
         this.id = id;
     }
 }

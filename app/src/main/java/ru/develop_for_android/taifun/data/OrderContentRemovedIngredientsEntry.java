@@ -9,11 +9,11 @@ import android.arch.persistence.room.PrimaryKey;
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "removed_ingredients", foreignKeys = {
-        @ForeignKey(entity = OrderContent.class, parentColumns = "id",
+        @ForeignKey(entity = OrderContentEntry.class, parentColumns = "id",
                 childColumns = "order_content_id", onUpdate = CASCADE, onDelete = CASCADE),
-        @ForeignKey(entity = IngredientsInFoodEntry.class, parentColumns = "id", childColumns = "ingredient_id")
+        @ForeignKey(entity = IngredientEntry.class, parentColumns = "id", childColumns = "ingredient_id")
 }, indices = {@Index("ingredient_id"),  @Index("order_content_id")})
-public class OrderContentRemovedIngredients {
+public class OrderContentRemovedIngredientsEntry {
     @PrimaryKey(autoGenerate = true)
     int id;
     @ColumnInfo(name = "order_content_id")
@@ -21,7 +21,7 @@ public class OrderContentRemovedIngredients {
     @ColumnInfo(name = "ingredient_id")
     int ingredientId;
 
-    public OrderContentRemovedIngredients(int orderContentId, int ingredientId) {
+    public OrderContentRemovedIngredientsEntry(int orderContentId, int ingredientId) {
         this.orderContentId = orderContentId;
         this.ingredientId = ingredientId;
     }

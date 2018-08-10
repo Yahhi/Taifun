@@ -14,7 +14,6 @@ import java.util.List;
 
 import ru.develop_for_android.taifun.data.AddressEntry;
 import ru.develop_for_android.taifun.data.AppDatabase;
-import ru.develop_for_android.taifun.data.AppExecutors;
 
 public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.ViewHolder> {
 

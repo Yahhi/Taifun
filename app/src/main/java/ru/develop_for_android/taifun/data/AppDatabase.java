@@ -8,10 +8,10 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import java.util.concurrent.Executors;
+import ru.develop_for_android.taifun.R;
 
 @Database(entities = {CategoryEntry.class, FoodEntry.class, IngredientEntry.class,
-            IngredientsInFoodEntry.class, OrderContent.class, OrderContentRemovedIngredients.class,
+            OrderContentEntry.class, OrderContentRemovedIngredientsEntry.class,
             OrderEntry.class, PromoEntry.class, PromoActiveFoodEntry.class, AddressEntry.class},
         version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
@@ -31,9 +31,12 @@ public abstract class AppDatabase extends RoomDatabase {
                             @Override
                             public void onCreate(@NonNull SupportSQLiteDatabase db) {
                                 super.onCreate(db);
-                                Executors.newSingleThreadScheduledExecutor().execute(() ->
-                                        getInstance(context).foodDao().newOrder(OrderEntry.getNewOrder(context)));
-
+                                AppExecutors.getInstance().diskIO().execute(() -> {
+                                            getInstance(context).foodDao().addAddress(new AddressEntry(context.getString(R.string.address_title_home), ""));
+                                            getInstance(context).foodDao().newOrder(OrderEntry.getNewOrder(context));
+                                            
+                                        }
+                                );
                             }
                         })
                         .build();

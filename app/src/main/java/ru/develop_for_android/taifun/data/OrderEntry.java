@@ -7,6 +7,7 @@ import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.util.Date;
 
@@ -23,7 +24,7 @@ public class OrderEntry {
     public static final int STATUS_FINISHED = 10;
     public static final int STATUS_SCHEDULED = 11;
 
-    static final int UNFINISHED_ORDER_ID = 1;
+    public static final int UNFINISHED_ORDER_ID = 100;
 
     @PrimaryKey(autoGenerate = false)
     int id;
@@ -97,10 +98,11 @@ public class OrderEntry {
 
     public static OrderEntry getNewOrder(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        OrderEntry order = new OrderEntry(preferences.getInt(MyInfoViewModel.DEFAULT_ADDRESS_ID_KEY, 0),
+        OrderEntry order = new OrderEntry(preferences.getInt(MyInfoViewModel.DEFAULT_ADDRESS_ID_KEY, 1),
                 preferences.getString(MyInfoViewModel.NAME_KEY, ""),
                 preferences.getString(MyInfoViewModel.PHONE_KEY, ""), "");
         order.id = UNFINISHED_ORDER_ID;
+        Log.i("FOOD", order.toString());
         return order;
     }
 }

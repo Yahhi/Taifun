@@ -22,18 +22,10 @@ public abstract class FoodDao {
     abstract void addFood(List<FoodEntry> foodEntry);
     @Insert
     abstract void addIngredients(List<IngredientEntry> ingredientEntry);
-    @Insert
-    abstract void addIngredientsInFood(List<IngredientsInFoodEntry> ingredients);
     @Transaction
     public void addDownloadedFoodInfo(CategoryEntry categoryEntries, List<FoodEntry> foodEntries) {
         addCategories(categoryEntries);
         addFood(foodEntries);
-    }
-    @Transaction
-    public void addDownloadedIngredientsInfo(List<IngredientEntry> ingredients,
-                                             List<IngredientsInFoodEntry> foodIngredients) {
-        addIngredients(ingredients);
-        addIngredientsInFood(foodIngredients);
     }
 
     @Insert
@@ -43,21 +35,32 @@ public abstract class FoodDao {
     @Transaction
     public void addDownloadedPromoInfo(List<PromoEntry> promoEntries, List<PromoActiveFoodEntry> foodEntries) {
         addPromo(promoEntries);
-        addPromoFoodDefinitions(foodEntries);
+        if (foodEntries != null) {
+            addPromoFoodDefinitions(foodEntries);
+        }
     }
 
     @Query("SELECT * FROM category ORDER BY title")
     public abstract LiveData<List<CategoryEntry>> getCategories();
 
+    @Transaction
     @Query("SELECT * FROM food WHERE category_id = :categoryId ORDER BY title")
-    public abstract LiveData<List<FoodEntry>> getFoodInCategory(int categoryId);
+    public abstract LiveData<List<FoodWithIngredients>> getFoodInCategory(String categoryId);
 
-    @Query("SELECT * FROM ingredient_in_food LEFT JOIN ingredient ON " +
-            "ingredient_in_food.ingredient_id = ingredient.id WHERE food_id = :foodId")
-    public abstract LiveData<List<IngredientEntry>> getIngredientsInFood(int foodId);
+    @Transaction
+    @Query(("SELECT * FROM food WHERE id = :id"))
+    public abstract LiveData<FoodWithIngredients> getFoodById(String id);
 
-    @Query("SELECT * FROM orders WHERE status <> " + OrderEntry.STATUS_FINISHED)
+    @Query("SELECT * FROM orders WHERE status NOT IN (" +
+            OrderEntry.STATUS_FINISHED + ", " + OrderEntry.STATUS_NEW + ")")
     public abstract LiveData<List<OrderEntry>> getActiveOrders();
+
+    @Query("SELECT * FROM order_content WHERE order_id = :orderId AND food_id = :foodId")
+    public abstract LiveData<OrderContentEntry> getFoodInOrder(int orderId, String foodId);
+
+    @Query("UPDATE order_content SET count = count + 1 WHERE order_id = :orderId AND food_id = :foodId")
+    public abstract void increaseFoodCount(int orderId, String foodId);
+
 
     @Query("SELECT * FROM orders WHERE status = " + OrderEntry.STATUS_FINISHED)
     public abstract LiveData<List<OrderEntry>> getArchiveOrders();
@@ -69,10 +72,10 @@ public abstract class FoodDao {
     public abstract void updateOrderInfo(OrderEntry orderEntry);
 
     @Insert
-    public abstract void addFoodToOrder(OrderContent foodInOrder);
+    public abstract void addFoodToOrder(OrderContentEntry foodInOrder);
 
     @Update
-    public abstract void updateFoodCount(OrderContent foodInOrder);
+    public abstract void updateFoodCount(OrderContentEntry foodInOrder);
 
     @Query("SELECT id FROM orders ORDER BY id DESC LIMIT 1")
     abstract int getLastOrderId();
@@ -129,17 +132,27 @@ public abstract class FoodDao {
 
     @Query("SELECT discount_currency, discount_percent FROM promo_food_inside LEFT JOIN promo ON promo_id = promo.id " +
             "WHERE food_item_id = :foodId OR food_category_id = :categoryId ORDER BY discount_currency DESC LIMIT 1")
-    abstract Discount getBestFixedDiscount(int foodId, int categoryId);
+    abstract Discount getBestFixedDiscount(String foodId, String categoryId);
 
     @Query("SELECT discount_currency, discount_percent FROM promo_food_inside LEFT JOIN promo ON promo_id = promo.id " +
             "WHERE food_item_id = :foodId OR food_category_id = :categoryId ORDER BY discount_percent DESC LIMIT 1")
-    abstract Discount getBestPercentDiscount(int foodId, int categoryId);
+    abstract Discount getBestPercentDiscount(String foodId, String categoryId);
 
-    public Long getPriceWithMaximumDiscount(int foodId, int categoryId, Long initialPrice) {
+    public Long getPriceWithMaximumDiscount(String foodId, String categoryId, Long initialPrice) {
         Discount percentDiscount = getBestPercentDiscount(foodId, categoryId);
         Discount fixedDiscount = getBestFixedDiscount(foodId, categoryId);
-        Long actualPriceWithPercent = percentDiscount.apply(initialPrice);
-        Long actualPriceWithFixed = fixedDiscount.apply(initialPrice);
+        Long actualPriceWithPercent;
+        if (percentDiscount == null) {
+            actualPriceWithPercent = initialPrice;
+        } else {
+            actualPriceWithPercent = percentDiscount.apply(initialPrice);
+        }
+        Long actualPriceWithFixed;
+        if (fixedDiscount == null) {
+            actualPriceWithFixed = initialPrice;
+        } else {
+            actualPriceWithFixed = fixedDiscount.apply(initialPrice);
+        }
         if (actualPriceWithPercent > actualPriceWithFixed)
             return actualPriceWithFixed;
         else

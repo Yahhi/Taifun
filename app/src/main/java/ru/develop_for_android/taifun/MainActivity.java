@@ -17,8 +17,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.crashlytics.android.Crashlytics;
-
 import ru.develop_for_android.taifun.networking.FoodSyncService;
 
 public class MainActivity extends AppCompatActivity
@@ -28,6 +26,9 @@ public class MainActivity extends AppCompatActivity
     private PromoListFragment promoFragment;
     private OrdersListFragment ordersFragment;
     private MyInfoFragment myInfoFragment;
+
+    private static final String ACTIVE_FRAGMENT_KEY = "active_fragment";
+    private int activeDrawerId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,19 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        if (savedInstanceState == null) {
+            activeDrawerId = R.id.nav_food;
+        } else {
+            activeDrawerId = savedInstanceState.getInt(ACTIVE_FRAGMENT_KEY, R.id.nav_food);
+        }
+        openSuitableFragment();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(ACTIVE_FRAGMENT_KEY, activeDrawerId);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -90,33 +104,29 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_food) {
-            if (foodFragment == null) {
-                foodFragment = new FoodListWithCategoriesFragment();
-            }
-            changeCurrentFragment(foodFragment);
-        } else if (id == R.id.nav_promo) {
-            if (promoFragment == null) {
-                promoFragment = new PromoListFragment();
-            }
-            changeCurrentFragment(promoFragment);
-        } else if (id == R.id.nav_orders) {
-            if (ordersFragment == null) {
-                ordersFragment = new OrdersListFragment();
-            }
-            changeCurrentFragment(ordersFragment);
-        } else if (id == R.id.nav_my_info) {
-            if (myInfoFragment == null) {
-                myInfoFragment = new MyInfoFragment();
-            }
-            changeCurrentFragment(myInfoFragment);
-        }
+        activeDrawerId = item.getItemId();
+        openSuitableFragment();
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void openSuitableFragment() {
+
+        if (activeDrawerId == R.id.nav_food) {
+            foodFragment = new FoodListWithCategoriesFragment();
+            changeCurrentFragment(foodFragment);
+        } else if (activeDrawerId == R.id.nav_promo) {
+            promoFragment = new PromoListFragment();
+            changeCurrentFragment(promoFragment);
+        } else if (activeDrawerId == R.id.nav_orders) {
+            ordersFragment = new OrdersListFragment();
+            changeCurrentFragment(ordersFragment);
+        } else if (activeDrawerId == R.id.nav_my_info) {
+            myInfoFragment = new MyInfoFragment();
+            changeCurrentFragment(myInfoFragment);
+        }
     }
 
     private void changeCurrentFragment(Fragment fragment) {

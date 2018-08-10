@@ -17,4 +17,16 @@
     <string name="my_phone">My phone</string>
     <string name="addresses">Addresses</string>
     <string name="food_image">food image</string>
+    <string name="image_for_promo">image for promo</string>
+    <string name="title_activity_food_info">Food info</string>
+    <string name="add_to_order">Add to order</string>
+    <string name="ingredients">Ingredients</string>
+    <plurals name="order_count_update">
+        <item quantity="one">Now there are %1$d item in order</item>
+        <item quantity="other">Now there are %1$d items in order</item>
+    </plurals>
+    <string name="weight">Weight: %1$d gr.</string>
+    <string name="title_activity_order_info">Order Info</string>
+    <string name="title_activity_order_confirmation">Order Confirmation</string>
+    <string name="address_title_home">Home</string>
 </resources>

@@ -7,10 +7,12 @@ import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import java.text.DecimalFormat;
+
 @Entity (tableName = "food", indices = @Index("category_id"),
     foreignKeys = @ForeignKey(entity = CategoryEntry.class, parentColumns = "id", childColumns = "category_id"))
 public class FoodEntry {
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey()
     @NonNull String id;
     @ColumnInfo(name = "category_id")
     String categoryId;
@@ -56,6 +58,12 @@ public class FoodEntry {
         return price;
     }
 
+    public String getReadablePrice() {
+        DecimalFormat df = new DecimalFormat("0.00");
+        double priceWithDot = (double) price / 100;
+        return "$ " + df.format(priceWithDot);
+    }
+
     public String getImageAddressLocal() {
         return imageAddressLocal;
     }
@@ -68,11 +76,16 @@ public class FoodEntry {
         this.imageAddressLocal = imageAddressLocal;
     }
 
+    @NonNull
     public String getId() {
         return id;
     }
 
     public String getReadableWeight() {
         return String.valueOf(weight) + " " + weightQuantifier;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
     }
 }
