@@ -55,7 +55,7 @@ public class FoodListFragment extends Fragment implements FoodClickListener {
         View fragmentView = inflater.inflate(R.layout.fragment_food_list, container, false);
         RecyclerView recyclerView = fragmentView.findViewById(R.id.food_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        adapter = new FoodListAdapter(this);
+        adapter = new FoodListAdapter(this, requireContext());
         recyclerView.setAdapter(adapter);
         setupViewModel();
 

@@ -9,6 +9,7 @@ import android.arch.persistence.room.Transaction;
 import android.arch.persistence.room.Update;
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static ru.develop_for_android.taifun.data.OrderEntry.UNFINISHED_ORDER_ID;
@@ -55,12 +56,19 @@ public abstract class FoodDao {
             OrderEntry.STATUS_FINISHED + ", " + OrderEntry.STATUS_NEW + ")")
     public abstract LiveData<List<OrderEntry>> getActiveOrders();
 
+
+    @Query("SELECT * FROM orders WHERE status NOT IN (" +
+            OrderEntry.STATUS_FINISHED + ", " + OrderEntry.STATUS_NEW + ")")
+    abstract List<OrderEntry> getFinalActiveOrders();
+
     @Query("SELECT * FROM order_content WHERE order_id = :orderId AND food_id = :foodId")
     public abstract LiveData<OrderContentEntry> getFoodInOrder(int orderId, String foodId);
 
     @Query("UPDATE order_content SET count = count + 1 WHERE order_id = :orderId AND food_id = :foodId")
     public abstract void increaseFoodCount(int orderId, String foodId);
 
+    @Query("SELECT * FROM orders WHERE status = " + OrderEntry.STATUS_FINISHED)
+    public abstract List<OrderEntry> getFinalArchiveOrders();
 
     @Query("SELECT * FROM orders WHERE status = " + OrderEntry.STATUS_FINISHED)
     public abstract LiveData<List<OrderEntry>> getArchiveOrders();
@@ -88,7 +96,10 @@ public abstract class FoodDao {
     }
 
     @Query("SELECT * FROM orders WHERE id = :id")
-    public abstract LiveData<OrderEntry> getOrderById(int id);
+    abstract OrderEntry getFinalOrderById(int id);
+
+    @Query("SELECT * FROM orders WHERE id = :id")
+    abstract LiveData<OrderEntry> getOrderById(int id);
 
     @Query("SELECT * FROM orders WHERE id = :id")
     abstract OrderEntry getUnfinishedOrder(int id);
@@ -97,9 +108,24 @@ public abstract class FoodDao {
         return getOrderById(UNFINISHED_ORDER_ID);
     }
 
-    @Transaction
-    @Query("SELECT * FROM orders WHERE id = :orderId")
-    public abstract LiveData<OrderWithFood> getOrderWithContent(int orderId);
+    public OrderWithFood getOrderWithContent(int orderId){
+        OrderEntry order = getFinalOrderById(orderId);
+        List<FoodWithCount> foodInOrder = getFoodListInOrder(orderId);
+        return new OrderWithFood(order, foodInOrder);
+    }
+
+    public ArrayList<OrderWithFood> getOrdersWithFood() {
+        ArrayList<OrderWithFood> ordersWithFood = new ArrayList<>();
+        List<OrderEntry> orders = getFinalActiveOrders();
+        for (OrderEntry order : orders) {
+            List<FoodWithCount> foodEntries = getFoodListInOrder(order.id);
+            ordersWithFood.add(new OrderWithFood(order, foodEntries));
+        }
+        return ordersWithFood;
+    }
+
+    @Query("SELECT food.*, order_content.count AS count FROM order_content LEFT JOIN food ON order_content.food_id = food.id WHERE order_id = :orderId")
+    abstract List<FoodWithCount> getFoodListInOrder(long orderId);
 
     @Query("SELECT * FROM promo")
     public abstract LiveData<List<PromoEntry>> getAllPromo();
@@ -130,11 +156,11 @@ public abstract class FoodDao {
         saveAddress(addressEntry);
     }
 
-    @Query("SELECT discount_currency, discount_percent FROM promo_food_inside LEFT JOIN promo ON promo_id = promo.id " +
+    @Query("SELECT title, discount_currency, discount_percent FROM promo_food_inside LEFT JOIN promo ON promo_id = promo.id " +
             "WHERE food_item_id = :foodId OR food_category_id = :categoryId ORDER BY discount_currency DESC LIMIT 1")
     abstract Discount getBestFixedDiscount(String foodId, String categoryId);
 
-    @Query("SELECT discount_currency, discount_percent FROM promo_food_inside LEFT JOIN promo ON promo_id = promo.id " +
+    @Query("SELECT title, discount_currency, discount_percent FROM promo_food_inside LEFT JOIN promo ON promo_id = promo.id " +
             "WHERE food_item_id = :foodId OR food_category_id = :categoryId ORDER BY discount_percent DESC LIMIT 1")
     abstract Discount getBestPercentDiscount(String foodId, String categoryId);
 

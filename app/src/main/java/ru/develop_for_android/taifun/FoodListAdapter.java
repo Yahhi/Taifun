@@ -1,5 +1,6 @@
 package ru.develop_for_android.taifun;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,9 +20,11 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.ViewHo
 
     private List<FoodWithIngredients> foodEntries;
     private FoodClickListener listener;
+    private Context context;
 
-    public FoodListAdapter(FoodClickListener listener) {
+    public FoodListAdapter(FoodClickListener listener, Context context) {
         this.listener = listener;
+        this.context = context;
     }
 
     public void initializeData(List<FoodWithIngredients> foodEntries) {
@@ -72,7 +75,7 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.ViewHo
         void onBind(FoodWithIngredients foodEntry) {
             foodId = foodEntry.getId();
             mTitle.setText(foodEntry.getTitle());
-            mPrice.setText(foodEntry.getReadablePrice());
+            mPrice.setText(foodEntry.getReadablePrice(context));
             mIngredients.setText(foodEntry.getReadableIngredientsList());
             Glide.with(mImage.getContext()).load(foodEntry.getImageAddressNetwork()).into(mImage);
             Log.i("FOOD", "loading " + foodEntry.getImageAddressNetwork());

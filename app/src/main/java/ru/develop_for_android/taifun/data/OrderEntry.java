@@ -3,17 +3,24 @@ package ru.develop_for_android.taifun.data;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import ru.develop_for_android.taifun.MyInfoViewModel;
+import ru.develop_for_android.taifun.R;
 
-@Entity(tableName = "orders", foreignKeys = @ForeignKey(entity = AddressEntry.class, parentColumns = "id", childColumns = "address_id"))
+@Entity(tableName = "orders",
+        foreignKeys = @ForeignKey(entity = AddressEntry.class, parentColumns = "id", childColumns = "address_id"),
+        indices = @Index(value = "address_id"))
 public class OrderEntry {
     public static final int STATUS_NEW = 0;
     public static final int STATUS_PLACED = 1;
@@ -44,12 +51,29 @@ public class OrderEntry {
     @ColumnInfo(name = "delivery_price")
     Long deliveryPrice = 0L;
 
+    @Ignore
     public OrderEntry(int addressId, String phone, String person, String comment) {
         this.addressId = addressId;
         this.phone = phone;
         this.person = person;
         this.comment = comment;
         dateStamp = new Date().getTime();
+    }
+
+    public OrderEntry(int id, Long dateStamp, Long scheduleStamp, int status, int addressId,
+                      String phone, String person, String comment, Long totalPrice, Long discount,
+                      Long deliveryPrice) {
+        this.id = id;
+        this.dateStamp = dateStamp;
+        this.scheduleStamp = scheduleStamp;
+        this.status = status;
+        this.addressId = addressId;
+        this.phone = phone;
+        this.person = person;
+        this.comment = comment;
+        this.totalPrice = totalPrice;
+        this.discount = discount;
+        this.deliveryPrice = deliveryPrice;
     }
 
     public int getStatus() {
@@ -94,6 +118,27 @@ public class OrderEntry {
 
     public void setDeliveryPrice(Long deliveryPrice) {
         this.deliveryPrice = deliveryPrice;
+    }
+
+    public String getTitle(Context context) {
+        Date created = new Date(dateStamp);
+        if (status == STATUS_FINISHED) {
+            Date now = new Date();
+            String createdString;
+            if ((now.getTime() - dateStamp) > 1000 * 60 * 60 * 24) {
+                createdString = new SimpleDateFormat("dd MMM", Locale.getDefault())
+                        .format(created);
+            } else {
+                createdString = new SimpleDateFormat("HH:mm", Locale.getDefault())
+                        .format(created);
+            }
+            return context.getString(R.string.order_finished_at, createdString);
+        } else {
+            return context.getString(R.string.in_progress,
+                    new SimpleDateFormat("HH:mm", Locale.getDefault())
+                    .format(created));
+
+        }
     }
 
     public static OrderEntry getNewOrder(Context context) {

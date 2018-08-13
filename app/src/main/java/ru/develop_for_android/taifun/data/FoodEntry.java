@@ -5,9 +5,12 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import java.text.DecimalFormat;
+
+import ru.develop_for_android.taifun.R;
 
 @Entity (tableName = "food", indices = @Index("category_id"),
     foreignKeys = @ForeignKey(entity = CategoryEntry.class, parentColumns = "id", childColumns = "category_id"))
@@ -58,10 +61,14 @@ public class FoodEntry {
         return price;
     }
 
-    public String getReadablePrice() {
-        DecimalFormat df = new DecimalFormat("0.00");
-        double priceWithDot = (double) price / 100;
-        return "$ " + df.format(priceWithDot);
+    public String getReadablePrice(Context context) {
+        if (price == null) {
+            return context.getString(R.string.no_price);
+        } else {
+            DecimalFormat df = new DecimalFormat("0.00");
+            double priceWithDot = (double) price / 100;
+            return "$ " + df.format(priceWithDot);
+        }
     }
 
     public String getImageAddressLocal() {

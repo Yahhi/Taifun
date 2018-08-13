@@ -8,6 +8,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import ru.develop_for_android.taifun.AppExecutors;
 import ru.develop_for_android.taifun.R;
 
 @Database(entities = {CategoryEntry.class, FoodEntry.class, IngredientEntry.class,

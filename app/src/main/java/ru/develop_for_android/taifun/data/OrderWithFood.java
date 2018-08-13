@@ -1,14 +1,21 @@
 package ru.develop_for_android.taifun.data;
 
-import android.arch.persistence.room.Relation;
-
 import java.util.List;
 
-public class OrderWithFood extends OrderEntry {
-    @Relation(parentColumn = "id", entityColumn = "food_id", entity = OrderContentEntry.class)
-    List<OrderContentEntry> foodInOrder;
+public class OrderWithFood {
+    OrderEntry orderEntry;
+    List<FoodWithCount> foodInOrder;
 
-    public OrderWithFood(int addressId, String phone, String person, String comment) {
-        super(addressId, phone, person, comment);
+    public OrderWithFood(OrderEntry orderEntry, List<FoodWithCount> foodInOrder) {
+        this.orderEntry = orderEntry;
+        this.foodInOrder = foodInOrder;
+    }
+
+    public OrderEntry getOrderEntry() {
+        return orderEntry;
+    }
+
+    public List<FoodWithCount> getFoodInOrder() {
+        return foodInOrder;
     }
 }

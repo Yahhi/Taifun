@@ -56,7 +56,7 @@ public class FoodInfoFragment extends Fragment {
                 adapter.initialize(foodWithIngredients.getIngredientEntries());
                 descriptionView.setText(foodWithIngredients.getDescription());
                 weightView.setText(getString(R.string.weight, foodWithIngredients.getWeight()));
-                priceView.setText(foodWithIngredients.getReadablePrice());
+                priceView.setText(foodWithIngredients.getReadablePrice(requireContext()));
                 Glide.with(FoodInfoFragment.this)
                         .load(foodWithIngredients.getImageAddressNetwork()).into(foodImage);
             }
