@@ -13,7 +13,8 @@ import ru.develop_for_android.taifun.R;
 
 @Database(entities = {CategoryEntry.class, FoodEntry.class, IngredientEntry.class,
             OrderContentEntry.class, OrderContentRemovedIngredientsEntry.class,
-            OrderEntry.class, PromoEntry.class, PromoActiveFoodEntry.class, AddressEntry.class},
+            OrderEntry.class, OrderStatusEntry.class,
+        PromoEntry.class, PromoActiveFoodEntry.class, AddressEntry.class},
         version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 

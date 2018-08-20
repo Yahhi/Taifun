@@ -15,9 +15,10 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class OrdersListFragment extends Fragment {
+public class OrdersListFragment extends Fragment implements OrderClickListener{
 
     OrderAdapter adapter;
+    OrderListViewModel viewModel;
 
     public OrdersListFragment() {
         // Required empty public constructor
@@ -30,7 +31,7 @@ public class OrdersListFragment extends Fragment {
         View fragmentView = inflater.inflate(R.layout.fragment_orders_list, container, false);
         RecyclerView ordersList = fragmentView.findViewById(R.id.orders_list);
         ordersList.setLayoutManager(new LinearLayoutManager(requireContext()));
-        adapter = new OrderAdapter(requireContext());
+        adapter = new OrderAdapter(requireContext(), this);
         ordersList.setAdapter(adapter);
 
         setupViewModel();
@@ -38,8 +39,12 @@ public class OrdersListFragment extends Fragment {
     }
 
     private void setupViewModel() {
-        OrderListViewModel viewModel = ViewModelProviders.of(requireActivity()).get(OrderListViewModel.class);
+        viewModel = ViewModelProviders.of(requireActivity()).get(OrderListViewModel.class);
         viewModel.getOrders().observe(this, ordersWithFoods -> adapter.initialize(ordersWithFoods));
     }
 
+    @Override
+    public void onClick(int orderId) {
+        viewModel.openOrderInfo(requireContext(), orderId);
+    }
 }

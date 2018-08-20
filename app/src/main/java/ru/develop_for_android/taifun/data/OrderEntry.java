@@ -24,8 +24,12 @@ import ru.develop_for_android.taifun.R;
 public class OrderEntry {
     public static final int STATUS_NEW = 0;
     public static final int STATUS_PLACED = 1;
+    private static final int statusPlacedTime = 50;
     public static final int STATUS_CONFIRMED = 2;
+    private static final int statusConfirmedTime = 45;
     public static final int STATUS_PROCESSED = 3;
+    private static final int statusProcessedTime = 25;
+    private static final int statusReadyTime = 5;
     public static final int STATUS_READY_TO_PICKUP = 4;
     public static final int STATUS_IN_DELIVERY = 5;
     public static final int STATUS_FINISHED = 10;
@@ -35,6 +39,8 @@ public class OrderEntry {
 
     @PrimaryKey(autoGenerate = false)
     int id;
+    @ColumnInfo(name = "global_number")
+    String globalNumber;
     @ColumnInfo(name = "date_stamp")
     Long dateStamp;
     @ColumnInfo(name = "schedule_stamp")
@@ -76,8 +82,25 @@ public class OrderEntry {
         this.deliveryPrice = deliveryPrice;
     }
 
-    public int getStatus() {
-        return status;
+    public static String getStatusReadable(int status) {
+        switch (status) {
+            case STATUS_PLACED:
+                return "In progress. Estimated time: " + statusPlacedTime;
+            case STATUS_CONFIRMED:
+                return "In progress. Estimated time: " + statusConfirmedTime;
+            case STATUS_PROCESSED:
+                return "In progress. Estimated time: " + statusProcessedTime;
+            case STATUS_READY_TO_PICKUP:
+                return "Ready. Please take your order home";
+            case STATUS_IN_DELIVERY:
+                return "In delivery";
+            case STATUS_SCHEDULED:
+                return "Waiting for suitable time";
+            case STATUS_FINISHED:
+                return "Finished";
+            default:
+                return "";
+        }
     }
 
     public void setStatus(int status) {
@@ -149,5 +172,21 @@ public class OrderEntry {
         order.id = UNFINISHED_ORDER_ID;
         Log.i("FOOD", order.toString());
         return order;
+    }
+
+    public String getGlobalNumber() {
+        return globalNumber;
+    }
+
+    void setGlobalNumber(String globalNumber) {
+        this.globalNumber = globalNumber;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public int getId() {
+        return id;
     }
 }

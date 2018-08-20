@@ -3,6 +3,8 @@ package ru.develop_for_android.taifun;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 
 import java.util.List;
@@ -23,5 +25,11 @@ public class OrderListViewModel extends AndroidViewModel {
 
     public MutableLiveData<List<OrderWithFood>> getOrders() {
         return orders;
+    }
+
+    public void openOrderInfo(Context context, int orderId) {
+        Intent orderInfoOpener = new Intent(context, OrderInfoActivity.class);
+        orderInfoOpener.putExtra(OrderInfoActivity.ORDER_ID_KEY, orderId);
+        context.startActivity(orderInfoOpener);
     }
 }

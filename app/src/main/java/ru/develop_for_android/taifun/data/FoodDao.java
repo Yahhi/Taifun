@@ -127,6 +127,12 @@ public abstract class FoodDao {
     @Query("SELECT food.*, order_content.count AS count FROM order_content LEFT JOIN food ON order_content.food_id = food.id WHERE order_id = :orderId")
     abstract List<FoodWithCount> getFoodListInOrder(long orderId);
 
+    @Query("SELECT * FROM order_status WHERE order_id = :orderId ORDER BY status ASC")
+    public abstract List<OrderStatusEntry> getOrderStatuses(long orderId);
+
+    @Insert
+    public abstract void addOrderStatus(OrderStatusEntry statusEntry);
+
     @Query("SELECT * FROM promo")
     public abstract LiveData<List<PromoEntry>> getAllPromo();
 

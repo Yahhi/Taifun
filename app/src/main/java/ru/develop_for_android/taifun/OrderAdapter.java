@@ -17,9 +17,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
 
     private List<OrderWithFood> orders;
     private Context context;
+    private OrderClickListener listener;
 
-    public OrderAdapter(Context context) {
+    public OrderAdapter(Context context, OrderClickListener listener) {
         this.context = context;
+        this.listener = listener;
     }
 
     public void initialize(List<OrderWithFood> orders) {
@@ -50,12 +52,14 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
+        private int orderId;
         private final TextView title;
         private final RecyclerView foodList;
         private OrderContentAdapter contentAdapter;
 
         ViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(v -> listener.onClick(orderId));
             title = itemView.findViewById(R.id.order_title);
             foodList = itemView.findViewById(R.id.order_content);
             foodList.setLayoutManager(new LinearLayoutManager(context));
@@ -64,6 +68,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         }
 
         void onBind(OrderWithFood order) {
+            orderId = order.getOrderEntry().getId();
             title.setText(order.getOrderEntry().getTitle(context));
             contentAdapter.initialize(order);
         }
