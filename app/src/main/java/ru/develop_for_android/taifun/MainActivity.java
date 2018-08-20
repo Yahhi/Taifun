@@ -1,11 +1,16 @@
 package ru.develop_for_android.taifun;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.JobIntentService;
@@ -16,6 +21,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.Toast;
 
 import ru.develop_for_android.taifun.networking.FoodSyncService;
 
@@ -26,6 +33,8 @@ public class MainActivity extends AppCompatActivity
     private PromoListFragment promoFragment;
     private OrdersListFragment ordersFragment;
     private MyInfoFragment myInfoFragment;
+
+    private static final int PERMISSION_CALL_CODE = 124;
 
     private static final String ACTIVE_FRAGMENT_KEY = "active_fragment";
     private int activeDrawerId;
@@ -49,6 +58,16 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        Button callActionButton = navigationView.findViewById(R.id.call_action);
+        callActionButton.setOnClickListener(v -> {
+            if (ActivityCompat.checkSelfPermission(MainActivity.this,
+                    Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{Manifest.permission.CALL_PHONE}, PERMISSION_CALL_CODE);
+            } else {
+                callCafe();
+            }
+        });
 
         if (savedInstanceState == null) {
             activeDrawerId = R.id.nav_food;
@@ -56,6 +75,34 @@ public class MainActivity extends AppCompatActivity
             activeDrawerId = savedInstanceState.getInt(ACTIVE_FRAGMENT_KEY, R.id.nav_food);
         }
         openSuitableFragment();
+    }
+
+    @SuppressLint("MissingPermission")
+    private void callCafe() {
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:123456789"));
+        startActivity(callIntent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == PERMISSION_CALL_CODE) {
+            for (int i = 0; i < permissions.length; i++) {
+                String permission = permissions[i];
+                int grantResult = grantResults[i];
+
+                if (permission.equals(Manifest.permission.CALL_PHONE)) {
+                    if (grantResult == PackageManager.PERMISSION_GRANTED) {
+                        callCafe();
+                    } else {
+                        Toast.makeText(getBaseContext(),
+                                "permission is not granted. We are unable to call cafe.",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override

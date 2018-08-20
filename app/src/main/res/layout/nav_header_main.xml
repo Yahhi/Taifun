@@ -28,7 +28,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <Button
-        android:id="@+id/textView"
+        android:id="@+id/call_action"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableStart="@android:drawable/stat_sys_phone_call"
