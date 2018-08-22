@@ -101,9 +101,6 @@ public abstract class FoodDao {
     @Query("SELECT * FROM orders WHERE id = :id")
     abstract LiveData<OrderEntry> getOrderById(int id);
 
-    @Query("SELECT * FROM orders WHERE id = :id")
-    abstract OrderEntry getUnfinishedOrder(int id);
-
     public LiveData<OrderEntry> getUnfinishedOrder() {
         return getOrderById(UNFINISHED_ORDER_ID);
     }

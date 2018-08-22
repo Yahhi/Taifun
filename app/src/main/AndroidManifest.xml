@@ -55,6 +55,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ru.develop_for_android.taifun.MainActivity" />
         </activity>
+        <activity
+            android:name=".OrderDetailsActivity"
+            android:label="@string/title_activity_order_details"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ru.develop_for_android.taifun.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

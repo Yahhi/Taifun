@@ -38,4 +38,12 @@
     <string name="ready_to_pickup">Ready to pickup</string>
     <string name="order_number_invalid">invalid order number</string>
     <string name="order_number"># %1$s</string>
+    <string name="title_activity_order_details">OrderDetailsActivity</string>
+    <string name="subtotal">Subtotal:</string>
+    <string name="discount">Discount:</string>
+    <string name="total">Total:</string>
+    <plurals name="pcs">
+        <item quantity="one">%1$d pc.</item>
+        <item quantity="other">%1$d pcs.</item>
+    </plurals>
 </resources>
