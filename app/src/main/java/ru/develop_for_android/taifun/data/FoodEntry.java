@@ -67,7 +67,7 @@ public class FoodEntry {
         } else {
             DecimalFormat df = new DecimalFormat("0.00");
             double priceWithDot = (double) price / 100;
-            return "$ " + df.format(priceWithDot);
+            return context.getString(R.string.money, df.format(priceWithDot));
         }
     }
 

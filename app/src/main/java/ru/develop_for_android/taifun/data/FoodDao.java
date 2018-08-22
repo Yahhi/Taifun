@@ -82,8 +82,19 @@ public abstract class FoodDao {
     @Insert
     public abstract void addFoodToOrder(OrderContentEntry foodInOrder);
 
-    @Update
-    public abstract void updateFoodCount(OrderContentEntry foodInOrder);
+    @Query("DELETE FROM order_content WHERE order_id = :orderId AND food_id = :foodId")
+    abstract void removeFoodFromOrder(int orderId, String foodId);
+
+    @Query("UPDATE order_content SET count = :foodCount WHERE order_id = :orderId AND food_id = :foodId")
+    abstract void updateFoodCount(long orderId, String foodId, int foodCount);
+
+    public void updateFoodCount(String foodId, int foodCount) {
+        if (foodCount == 0) {
+            removeFoodFromOrder(OrderEntry.UNFINISHED_ORDER_ID, foodId);
+        } else {
+            updateFoodCount(OrderEntry.UNFINISHED_ORDER_ID, foodId, foodCount);
+        }
+    }
 
     @Query("SELECT id FROM orders ORDER BY id DESC LIMIT 1")
     abstract int getLastOrderId();
@@ -121,7 +132,9 @@ public abstract class FoodDao {
         return ordersWithFood;
     }
 
-    @Query("SELECT food.*, order_content.count AS count FROM order_content LEFT JOIN food ON order_content.food_id = food.id WHERE order_id = :orderId")
+    @Query("SELECT food.*, order_content.count AS count, order_content.actual_price AS final_price, " +
+            "order_content.actual_discount as discount " +
+            "FROM order_content LEFT JOIN food ON order_content.food_id = food.id WHERE order_id = :orderId")
     abstract List<FoodWithCount> getFoodListInOrder(long orderId);
 
     @Query("SELECT * FROM order_status WHERE order_id = :orderId ORDER BY status ASC")

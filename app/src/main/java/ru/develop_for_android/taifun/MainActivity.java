@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        Button callActionButton = navigationView.findViewById(R.id.call_action);
+        Button callActionButton = navigationView.getHeaderView(0).findViewById(R.id.call_action);
         callActionButton.setOnClickListener(v -> {
             if (ActivityCompat.checkSelfPermission(MainActivity.this,
                     Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {

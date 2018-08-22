@@ -16,7 +16,6 @@
     <string name="my_name">My name</string>
     <string name="my_phone">My phone</string>
     <string name="addresses">Addresses</string>
-    <string name="food_image">food image</string>
     <string name="image_for_promo">image for promo</string>
     <string name="title_activity_food_info">Food info</string>
     <string name="add_to_order">Add to order</string>
@@ -38,7 +37,7 @@
     <string name="ready_to_pickup">Ready to pickup</string>
     <string name="order_number_invalid">invalid order number</string>
     <string name="order_number"># %1$s</string>
-    <string name="title_activity_order_details">OrderDetailsActivity</string>
+    <string name="title_activity_order_details">Order details</string>
     <string name="subtotal">Subtotal:</string>
     <string name="discount">Discount:</string>
     <string name="total">Total:</string>
@@ -46,4 +45,9 @@
         <item quantity="one">%1$d pc.</item>
         <item quantity="other">%1$d pcs.</item>
     </plurals>
+    <string name="money">$ %1$s</string>
+    <string name="increase_food_count_by_one">Increase food count by one</string>
+    <string name="decrease_food_count_by_one">Decrease food count by one</string>
+    <string name="order_content">Order content</string>
+    <string name="food_image">food image</string>
 </resources>

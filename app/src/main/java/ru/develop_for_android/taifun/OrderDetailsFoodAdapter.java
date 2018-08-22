@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,9 +21,11 @@ public class OrderDetailsFoodAdapter extends RecyclerView.Adapter<OrderDetailsFo
 
     private List<FoodWithCount> food;
     private Context context;
+    AddRemoveListener listener;
 
-    public OrderDetailsFoodAdapter(Context context) {
+    public OrderDetailsFoodAdapter(Context context, AddRemoveListener listener) {
         this.context = context;
+        this.listener = listener;
     }
 
     public void initializeData(List<FoodWithCount> foodEntries) {
@@ -33,7 +36,7 @@ public class OrderDetailsFoodAdapter extends RecyclerView.Adapter<OrderDetailsFo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_food,
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_food_with_count,
                 parent, false);
         return new ViewHolder(view);
     }
@@ -55,26 +58,38 @@ public class OrderDetailsFoodAdapter extends RecyclerView.Adapter<OrderDetailsFo
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private String foodId;
+        int count;
 
         private final ImageView mImage;
         private final TextView mTitle;
         private final TextView mPrice;
-        private final TextView mIngredients;
+        private final TextView mCount;
+        private final TextView mTotalPrice;
+        private final ImageButton mIncrement;
+        private final ImageButton mDecrement;
 
         public ViewHolder(View itemView) {
             super(itemView);
             mImage = itemView.findViewById(R.id.food_info_image);
             mTitle = itemView.findViewById(R.id.food_info_title);
             mPrice = itemView.findViewById(R.id.food_info_price);
-            mIngredients = itemView.findViewById(R.id.food_info_contents);
+            mCount = itemView.findViewById(R.id.food_info_count);
+            mTotalPrice = itemView.findViewById(R.id.food_info_total);
+            mIncrement = itemView.findViewById(R.id.increment);
+            mIncrement.setOnClickListener(v -> listener.onCountChange(foodId, count + 1));
+            mDecrement = itemView.findViewById(R.id.decrement);
+            mDecrement.setOnClickListener(dView -> listener.onCountChange(foodId, count - 1));
         }
 
         void onBind(FoodWithCount foodEntry) {
             foodId = foodEntry.getId();
+            count = foodEntry.getCount();
+
             mTitle.setText(foodEntry.getTitle());
             mPrice.setText(foodEntry.getReadablePrice(context));
             int count = foodEntry.getCount();
-            mIngredients.setText(context.getResources().getQuantityString(R.plurals.order_count_update, count, count));
+            mCount.setText(context.getResources().getQuantityString(R.plurals.pcs, count, count));
+            mTotalPrice.setText(foodEntry.getFinalPrice(context));
             Glide.with(mImage.getContext()).load(foodEntry.getImageAddressNetwork()).into(mImage);
             Log.i("FOOD", "loading " + foodEntry.getImageAddressNetwork());
         }

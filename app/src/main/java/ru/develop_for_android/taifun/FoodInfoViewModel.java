@@ -33,7 +33,8 @@ public class FoodInfoViewModel extends ViewModel {
                 String categoryId = food.getValue().getCategoryId();
                 long initialPrice = food.getValue().getPrice();
                 long actualPrice = database.foodDao().getPriceWithMaximumDiscount(foodId, categoryId, initialPrice);
-                OrderContentEntry newItemInOrder = new OrderContentEntry(foodId, OrderEntry.UNFINISHED_ORDER_ID, initialPrice, actualPrice);
+                OrderContentEntry newItemInOrder = new OrderContentEntry(foodId, OrderEntry.UNFINISHED_ORDER_ID, actualPrice,
+                        initialPrice - actualPrice);
                 database.foodDao().addFoodToOrder(newItemInOrder);
             } else {
                 database.foodDao().increaseFoodCount(OrderEntry.UNFINISHED_ORDER_ID, foodId);

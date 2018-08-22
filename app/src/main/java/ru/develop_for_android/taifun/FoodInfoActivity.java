@@ -2,10 +2,13 @@ package ru.develop_for_android.taifun;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import ru.develop_for_android.taifun.data.AppDatabase;
@@ -77,4 +80,19 @@ public class FoodInfoActivity extends AppCompatActivity {
                 Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_basket) {
+            Intent openOrderDetails = new Intent(getBaseContext(), OrderDetailsActivity.class);
+            startActivity(openOrderDetails);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_food_info, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 }

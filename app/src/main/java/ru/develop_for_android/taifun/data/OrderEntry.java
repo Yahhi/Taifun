@@ -51,9 +51,6 @@ public class OrderEntry {
     String phone;
     String person;
     String comment;
-    @ColumnInfo(name = "total")
-    Long totalPrice;
-    Long discount;
     @ColumnInfo(name = "delivery_price")
     Long deliveryPrice = 0L;
 
@@ -67,8 +64,7 @@ public class OrderEntry {
     }
 
     public OrderEntry(int id, Long dateStamp, Long scheduleStamp, int status, int addressId,
-                      String phone, String person, String comment, Long totalPrice, Long discount,
-                      Long deliveryPrice) {
+                      String phone, String person, String comment, Long deliveryPrice) {
         this.id = id;
         this.dateStamp = dateStamp;
         this.scheduleStamp = scheduleStamp;
@@ -77,8 +73,6 @@ public class OrderEntry {
         this.phone = phone;
         this.person = person;
         this.comment = comment;
-        this.totalPrice = totalPrice;
-        this.discount = discount;
         this.deliveryPrice = deliveryPrice;
     }
 
@@ -117,22 +111,6 @@ public class OrderEntry {
 
     public String getComment() {
         return comment;
-    }
-
-    public Long getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(Long totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public Long getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(Long discount) {
-        this.discount = discount;
     }
 
     public Long getDeliveryPrice() {

@@ -15,6 +15,7 @@ public class OrderDetailsViewModel extends AndroidViewModel {
 
     public OrderDetailsViewModel(@NonNull Application application) {
         super(application);
+        order = new MutableLiveData<>();
         AppExecutors.getInstance().diskIO().execute(() ->
                 order.postValue(AppDatabase.getInstance(application).foodDao()
                         .getOrderWithContent(OrderEntry.UNFINISHED_ORDER_ID)));
@@ -22,5 +23,13 @@ public class OrderDetailsViewModel extends AndroidViewModel {
 
     public MutableLiveData<OrderWithFood> getOrder() {
         return order;
+    }
+
+    public void setFoodCount(String foodId, int count) {
+        AppExecutors.getInstance().diskIO().execute(() -> {
+            AppDatabase.getInstance(getApplication()).foodDao().updateFoodCount(foodId, count);
+            order.postValue(AppDatabase.getInstance(getApplication()).foodDao()
+                    .getOrderWithContent(OrderEntry.UNFINISHED_ORDER_ID));
+        });
     }
 }
