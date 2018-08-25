@@ -19,6 +19,7 @@ public class MyInfoViewModel extends AndroidViewModel {
 
     private String userName;
     private String userPhone;
+    private int defaultAddressId;
     private LiveData<List<AddressEntry>> addresses;
 
     public MyInfoViewModel(@NonNull Application application) {
@@ -26,6 +27,7 @@ public class MyInfoViewModel extends AndroidViewModel {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getApplication());
         userName = preferences.getString(NAME_KEY, "Name");
         userPhone = preferences.getString(PHONE_KEY, "Phone");
+        defaultAddressId = preferences.getInt(DEFAULT_ADDRESS_ID_KEY, -1);
 
         AppDatabase database = AppDatabase.getInstance(this.getApplication());
         addresses = database.foodDao().getActualAddresses();
@@ -48,6 +50,14 @@ public class MyInfoViewModel extends AndroidViewModel {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getApplication());
         SharedPreferences.Editor prefEditor = preferences.edit();
         prefEditor.putString(PHONE_KEY, userPhone);
+        prefEditor.apply();
+    }
+
+    public void setDefaultAddressId(int id) {
+        this.defaultAddressId = id;
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getApplication());
+        SharedPreferences.Editor prefEditor = preferences.edit();
+        prefEditor.putInt(DEFAULT_ADDRESS_ID_KEY, id);
         prefEditor.apply();
     }
 

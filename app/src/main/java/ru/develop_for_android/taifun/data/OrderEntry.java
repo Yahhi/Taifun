@@ -37,6 +37,8 @@ public class OrderEntry {
 
     public static final int UNFINISHED_ORDER_ID = 100;
 
+    public static final int NO_DELIVERY = -100;
+
     @PrimaryKey(autoGenerate = false)
     int id;
     @ColumnInfo(name = "global_number")
@@ -46,6 +48,7 @@ public class OrderEntry {
     @ColumnInfo(name = "schedule_stamp")
     Long scheduleStamp;
     int status = STATUS_NEW;
+
     @ColumnInfo(name = "address_id")
     int addressId;
     String phone;
@@ -74,6 +77,33 @@ public class OrderEntry {
         this.person = person;
         this.comment = comment;
         this.deliveryPrice = deliveryPrice;
+    }
+
+    public void setDateStamp(Long dateStamp) {
+        this.dateStamp = dateStamp;
+    }
+
+    public void setScheduleStamp(Long scheduleStamp) {
+        this.scheduleStamp = scheduleStamp;
+    }
+
+    public void setAddressId(int addressId) {
+        this.addressId = addressId;
+    }
+    public int getAddressId() {
+        return addressId;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setPerson(String person) {
+        this.person = person;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public static String getStatusReadable(int status) {

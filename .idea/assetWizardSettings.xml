@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/content/ic_remove_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_done_all_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -28,8 +28,8 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_remove" />
-                            <entry key="sourceFile" value="$USER_HOME$/Downloads/if_basket_1370043.svg" />
+                            <entry key="outputName" value="ic_done_all" />
+                            <entry key="sourceFile" value="C:\Users\Yahhi\Downloads\if_basket_1370043.svg" />
                           </map>
                         </option>
                       </PersistentState>

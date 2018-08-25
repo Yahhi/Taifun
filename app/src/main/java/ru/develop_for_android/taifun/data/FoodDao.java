@@ -100,10 +100,11 @@ public abstract class FoodDao {
     abstract int getLastOrderId();
 
     @Transaction
-    public void finishOrder(OrderEntry unfinishedOrder, Context context) {
+    public int finishOrder(OrderEntry unfinishedOrder, Context context) {
         unfinishedOrder.id = getLastOrderId() + 1;
         updateOrderInfo(unfinishedOrder);
         newOrder(OrderEntry.getNewOrder(context));
+        return unfinishedOrder.id;
     }
 
     @Query("SELECT * FROM orders WHERE id = :id")
@@ -150,7 +151,7 @@ public abstract class FoodDao {
     public abstract LiveData<List<AddressEntry>> getActualAddresses();
 
     @Query("SELECT * FROM address WHERE id = :id")
-    abstract AddressEntry getAddressById(int id);
+    public abstract LiveData<AddressEntry> getAddress(int id);
 
     @Insert
     public abstract void addAddress(AddressEntry addressEntry);

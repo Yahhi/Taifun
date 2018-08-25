@@ -9,19 +9,20 @@
     <ImageView
         android:id="@+id/food_in_order_image"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:contentDescription="@string/food_image"
-        app:srcCompat="@drawable/ic_broken_image"
-        android:paddingTop="8dp"
         android:paddingBottom="8dp"
+        android:paddingEnd="16dp"
         android:paddingStart="8dp"
-        android:paddingEnd="16dp"/>
+        android:paddingTop="8dp"
+        app:srcCompat="@drawable/ic_broken_image" />
 
     <TextView
         android:id="@+id/food_in_order_quantity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/quantity_background"
-        android:gravity="bottom|end"
+        android:background="@drawable/circle"
+        android:gravity="center"
+        android:layout_gravity="bottom|end"
         tools:text="3" />
 </FrameLayout>

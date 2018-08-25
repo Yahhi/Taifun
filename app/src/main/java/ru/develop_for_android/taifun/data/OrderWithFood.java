@@ -68,4 +68,12 @@ public class OrderWithFood {
         double priceWithDot = (double) foodPrice / 100;
         return context.getString(R.string.money, df.format(priceWithDot));
     }
+
+    public int getItemsCount() {
+        int count = 0;
+        for (FoodWithCount food : foodInOrder) {
+            count += food.count;
+        }
+        return count;
+    }
 }

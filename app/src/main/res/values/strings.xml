@@ -50,4 +50,17 @@
     <string name="decrease_food_count_by_one">Decrease food count by one</string>
     <string name="order_content">Order content</string>
     <string name="food_image">food image</string>
+    <string name="additional_info">Additional info:</string>
+    <string name="delivery">Delivery:</string>
+    <string name="to_address">To address</string>
+    <string name="pick_up_in_cafe">Pick up in cafe</string>
+    <string name="schedule">Schedule</string>
+    <string name="edit_address">edit address</string>
+    <string name="delivery_price">Delivery price:</string>
+    <string name="free">free</string>
+    <plurals name="dishes_count">
+        <item quantity="zero">No dishes in order</item>
+        <item quantity="one">%1$d dish in order</item>
+        <item quantity="other">%1$d dishes in order</item>
+    </plurals>
 </resources>
