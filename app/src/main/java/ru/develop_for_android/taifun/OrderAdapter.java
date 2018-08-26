@@ -32,7 +32,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_promo,
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_order,
                 parent, false);
         return new ViewHolder(view);
     }
@@ -62,7 +62,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             itemView.setOnClickListener(v -> listener.onClick(orderId));
             title = itemView.findViewById(R.id.order_title);
             foodList = itemView.findViewById(R.id.order_content);
-            foodList.setLayoutManager(new LinearLayoutManager(context));
+            foodList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
             contentAdapter = new OrderContentAdapter(context);
             foodList.setAdapter(contentAdapter);
         }

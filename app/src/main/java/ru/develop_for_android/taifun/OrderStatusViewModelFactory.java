@@ -6,11 +6,11 @@ import android.support.annotation.NonNull;
 
 import ru.develop_for_android.taifun.data.AppDatabase;
 
-public class OrderInfoViewModelFactory extends ViewModelProvider.NewInstanceFactory {
+public class OrderStatusViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     private final AppDatabase databaseInstance;
     private final int orderId;
 
-    OrderInfoViewModelFactory(AppDatabase database, int orderId) {
+    OrderStatusViewModelFactory(AppDatabase database, int orderId) {
         this.databaseInstance = database;
         this.orderId = orderId;
     }
@@ -19,6 +19,6 @@ public class OrderInfoViewModelFactory extends ViewModelProvider.NewInstanceFact
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new OrderInfoViewModel(databaseInstance, orderId);
+        return (T) new OrderStatusViewModel(databaseInstance, orderId);
     }
 }

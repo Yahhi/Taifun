@@ -8,6 +8,7 @@ import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Transaction;
 import android.arch.persistence.room.Update;
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +18,11 @@ import static ru.develop_for_android.taifun.data.OrderEntry.UNFINISHED_ORDER_ID;
 @Dao
 public abstract class FoodDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract void addCategories(CategoryEntry categoryEntry);
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract void addFood(List<FoodEntry> foodEntry);
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract void addIngredients(List<IngredientEntry> ingredientEntry);
     @Transaction
     public void addDownloadedFoodInfo(CategoryEntry categoryEntries, List<FoodEntry> foodEntries) {
@@ -29,9 +30,9 @@ public abstract class FoodDao {
         addFood(foodEntries);
     }
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract void addPromo(List<PromoEntry> promoEntries);
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract void addPromoFoodDefinitions(List<PromoActiveFoodEntry> foodEntries);
     @Transaction
     public void addDownloadedPromoInfo(List<PromoEntry> promoEntries, List<PromoActiveFoodEntry> foodEntries) {
@@ -57,8 +58,8 @@ public abstract class FoodDao {
     public abstract LiveData<List<OrderEntry>> getActiveOrders();
 
 
-    @Query("SELECT * FROM orders WHERE status NOT IN (" +
-            OrderEntry.STATUS_FINISHED + ", " + OrderEntry.STATUS_NEW + ")")
+    @Query("SELECT * FROM orders WHERE status <> " +
+            OrderEntry.STATUS_FINISHED + " AND status <> " + OrderEntry.STATUS_NEW + "")
     abstract List<OrderEntry> getFinalActiveOrders();
 
     @Query("SELECT * FROM order_content WHERE order_id = :orderId AND food_id = :foodId")
@@ -76,8 +77,8 @@ public abstract class FoodDao {
     @Insert
     public abstract void newOrder(OrderEntry orderEntry);
 
-    @Update
-    public abstract void updateOrderInfo(OrderEntry orderEntry);
+    @Query("UPDATE orders SET id = :id, status = " + OrderEntry.STATUS_PLACED + " WHERE id = " + UNFINISHED_ORDER_ID)
+    abstract void updateUnfinishedOrderId(int id);
 
     @Insert
     public abstract void addFoodToOrder(OrderContentEntry foodInOrder);
@@ -101,10 +102,10 @@ public abstract class FoodDao {
 
     @Transaction
     public int finishOrder(OrderEntry unfinishedOrder, Context context) {
-        unfinishedOrder.id = getLastOrderId() + 1;
-        updateOrderInfo(unfinishedOrder);
+        int id = getLastOrderId() + 1;
+        updateUnfinishedOrderId(id);
         newOrder(OrderEntry.getNewOrder(context));
-        return unfinishedOrder.id;
+        return id;
     }
 
     @Query("SELECT * FROM orders WHERE id = :id")
@@ -123,13 +124,13 @@ public abstract class FoodDao {
         return new OrderWithFood(order, foodInOrder);
     }
 
-    public ArrayList<OrderWithFood> getOrdersWithFood() {
+    public ArrayList<OrderWithFood> getOrdersWithFood(List<OrderEntry> orders) {
         ArrayList<OrderWithFood> ordersWithFood = new ArrayList<>();
-        List<OrderEntry> orders = getFinalActiveOrders();
         for (OrderEntry order : orders) {
             List<FoodWithCount> foodEntries = getFoodListInOrder(order.id);
             ordersWithFood.add(new OrderWithFood(order, foodEntries));
         }
+        Log.i("ORDERS", "there are " + ordersWithFood.size() + " orders");
         return ordersWithFood;
     }
 

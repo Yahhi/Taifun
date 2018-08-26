@@ -4,11 +4,12 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import ru.develop_for_android.taifun.data.AppDatabase;
 import ru.develop_for_android.taifun.data.OrderEntry;
 
-public class OrderInfoActivity extends AppCompatActivity {
+public class OrderStatusActivity extends AppCompatActivity {
 
     private int orderId;
     public static final String ORDER_ID_KEY = "oder_id";
@@ -26,14 +27,17 @@ public class OrderInfoActivity extends AppCompatActivity {
         setupViewModel();
 
         setContentView(R.layout.activity_order_info);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void setupViewModel() {
 
-        OrderInfoViewModelFactory factory = new OrderInfoViewModelFactory(
+        OrderStatusViewModelFactory factory = new OrderStatusViewModelFactory(
                 AppDatabase.getInstance(getBaseContext()), orderId);
-        ViewModelProviders.of(this, factory).get(OrderInfoViewModel.class);
+        ViewModelProviders.of(this, factory).get(OrderStatusViewModel.class);
     }
 
 }

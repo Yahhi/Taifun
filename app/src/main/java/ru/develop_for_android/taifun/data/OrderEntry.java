@@ -178,6 +178,7 @@ public class OrderEntry {
                 preferences.getString(MyInfoViewModel.NAME_KEY, ""),
                 preferences.getString(MyInfoViewModel.PHONE_KEY, ""), "");
         order.id = UNFINISHED_ORDER_ID;
+        order.status = STATUS_NEW;
         Log.i("FOOD", order.toString());
         return order;
     }

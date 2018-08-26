@@ -40,9 +40,10 @@
                 android:value="ru.develop_for_android.taifun.MainActivity" />
         </activity>
         <activity
-            android:name=".OrderInfoActivity"
+            android:name=".OrderStatusActivity"
             android:label="@string/title_activity_order_info"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ru.develop_for_android.taifun.MainActivity" />

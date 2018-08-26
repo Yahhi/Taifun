@@ -10,14 +10,14 @@ import ru.develop_for_android.taifun.data.AppDatabase;
 import ru.develop_for_android.taifun.data.OrderStatusEntry;
 import ru.develop_for_android.taifun.data.OrderWithFood;
 
-public class OrderInfoViewModel extends ViewModel
+public class OrderStatusViewModel extends ViewModel
 {
     private MutableLiveData<OrderWithFood> order;
     private MutableLiveData<List<OrderStatusEntry>> statuses;
     private AppDatabase database;
     private int orderId;
 
-    public OrderInfoViewModel(@NonNull AppDatabase database, int orderId) {
+    public OrderStatusViewModel(@NonNull AppDatabase database, int orderId) {
         this.database = database;
         this.orderId = orderId;
         order = new MutableLiveData<>();

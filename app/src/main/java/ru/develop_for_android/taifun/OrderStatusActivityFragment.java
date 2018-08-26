@@ -23,12 +23,12 @@ import ru.develop_for_android.taifun.data.OrderWithFood;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class OrderInfoActivityFragment extends Fragment {
+public class OrderStatusActivityFragment extends Fragment {
 
     TextView orderNumber, orderStatus, orderTimePlased, orderTimeConfirmed, orderTimeProcessed, orderTimeReady;
     OrderContentAdapter adapter;
 
-    public OrderInfoActivityFragment() {
+    public OrderStatusActivityFragment() {
     }
 
     @Override
@@ -50,7 +50,7 @@ public class OrderInfoActivityFragment extends Fragment {
     }
 
     private void setupViewModel() {
-        OrderInfoViewModel viewModel = ViewModelProviders.of(requireActivity()).get(OrderInfoViewModel.class);
+        OrderStatusViewModel viewModel = ViewModelProviders.of(requireActivity()).get(OrderStatusViewModel.class);
         MutableLiveData<OrderWithFood> order = viewModel.getOrder();
         order.observe(this, order1 -> {
             if (order1 == null) {

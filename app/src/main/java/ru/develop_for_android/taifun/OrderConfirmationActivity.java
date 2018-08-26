@@ -92,8 +92,8 @@ public class OrderConfirmationActivity extends AppCompatActivity {
         viewModel.finishedId.observe(this, integer -> {
             if (integer != null) {
                 Toast.makeText(getBaseContext(), "Order is saved", Toast.LENGTH_SHORT).show();
-                Intent openOrderStatus = new Intent(getBaseContext(), OrderInfoActivity.class);
-                openOrderStatus.putExtra(OrderInfoActivity.ORDER_ID_KEY, integer);
+                Intent openOrderStatus = new Intent(getBaseContext(), OrderStatusActivity.class);
+                openOrderStatus.putExtra(OrderStatusActivity.ORDER_ID_KEY, integer);
                 startActivity(openOrderStatus);
             }
         });
