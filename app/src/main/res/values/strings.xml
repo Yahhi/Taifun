@@ -58,6 +58,8 @@
     <string name="edit_address">edit address</string>
     <string name="delivery_price">Delivery price:</string>
     <string name="free">free</string>
+    <string name="food_list_is_not_ready_yet">Food list is not ready yet</string>
+    <string name="how_about_taifun_food">How about Taifun food?</string>
     <plurals name="dishes_count">
         <item quantity="zero">No dishes in order</item>
         <item quantity="one">%1$d dish in order</item>

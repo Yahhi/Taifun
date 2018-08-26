@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".MyApplication"
@@ -14,6 +15,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <service android:name="ru.develop_for_android.taifun.widget.WidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -66,6 +71,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ru.develop_for_android.taifun.MainActivity" />
         </activity>
+
+        <receiver android:name="ru.develop_for_android.taifun.widget.FoodListWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/food_list_widget_info" />
+        </receiver>
     </application>
 
 </manifest>

@@ -49,6 +49,9 @@ public abstract class FoodDao {
     @Query("SELECT * FROM food WHERE category_id = :categoryId ORDER BY title")
     public abstract LiveData<List<FoodWithIngredients>> getFoodInCategory(String categoryId);
 
+    @Query("SELECT * FROM food ORDER BY RANDOM() LIMIT 4")
+    public abstract List<FoodEntry> getRandomFood();
+
     @Transaction
     @Query(("SELECT * FROM food WHERE id = :id"))
     public abstract LiveData<FoodWithIngredients> getFoodById(String id);
