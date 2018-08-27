@@ -18,10 +18,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import ru.develop_for_android.taifun.networking.FoodSyncService;
 
@@ -76,6 +79,53 @@ public class MainActivity extends AppCompatActivity
             activeDrawerId = savedInstanceState.getInt(ACTIVE_FRAGMENT_KEY, R.id.nav_food);
         }
         openSuitableFragment();
+
+        listenForRemoteChanges();
+    }
+
+    private void listenForRemoteChanges() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final CollectionReference foodRef = db.collection("categories");
+        foodRef.addSnapshotListener((queryDocumentSnapshots, e) -> {
+            if (e != null) {
+                Log.w("FIREBASE", "Listen failed.", e);
+                return;
+            }
+
+            if (queryDocumentSnapshots != null) {
+                Log.d("FIREBASE", "Updates found");
+
+                Intent bundle = new Intent();
+                bundle.putExtra(FoodSyncService.KEY_JOB_TYPE, FoodSyncService.TYPE_FOOD);
+                JobIntentService.enqueueWork(getBaseContext(),
+                        FoodSyncService.class, FoodSyncService.jobId,
+                        bundle);
+            } else {
+                Log.d("FIREBASE", "Current data: null");
+            }
+
+        });
+
+        final CollectionReference promoRef = db.collection("promo");
+        promoRef.addSnapshotListener((queryDocumentSnapshots, e) -> {
+            if (e != null) {
+                Log.w("FIREBASE", "Listen failed.", e);
+                return;
+            }
+
+            if (queryDocumentSnapshots != null) {
+                Log.d("FIREBASE", "Updates found");
+
+                Intent bundle = new Intent();
+                bundle.putExtra(FoodSyncService.KEY_JOB_TYPE, FoodSyncService.TYPE_PROMO);
+                JobIntentService.enqueueWork(getBaseContext(),
+                        FoodSyncService.class, FoodSyncService.jobId,
+                        bundle);
+            } else {
+                Log.d("FIREBASE", "Current data: null");
+            }
+
+        });
     }
 
     @SuppressLint("MissingPermission")
@@ -120,32 +170,6 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-
-            Intent bundle = new Intent();
-            JobIntentService.enqueueWork(getBaseContext(),
-                    FoodSyncService.class, FoodSyncService.jobId,
-                    bundle);
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

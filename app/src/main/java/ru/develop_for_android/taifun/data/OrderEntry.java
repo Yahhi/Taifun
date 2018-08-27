@@ -42,7 +42,7 @@ public class OrderEntry {
     @PrimaryKey(autoGenerate = false)
     int id;
     @ColumnInfo(name = "global_number")
-    String globalNumber;
+    long globalNumber;
     @ColumnInfo(name = "date_stamp")
     Long dateStamp;
     @ColumnInfo(name = "schedule_stamp")
@@ -183,11 +183,11 @@ public class OrderEntry {
         return order;
     }
 
-    public String getGlobalNumber() {
+    public long getGlobalNumber() {
         return globalNumber;
     }
 
-    void setGlobalNumber(String globalNumber) {
+    void setGlobalNumber(long globalNumber) {
         this.globalNumber = globalNumber;
     }
 

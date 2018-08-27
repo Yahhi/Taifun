@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.Locale;
 
 import ru.develop_for_android.taifun.data.OrderEntry;
@@ -26,7 +26,9 @@ import ru.develop_for_android.taifun.data.OrderWithFood;
 public class OrderStatusActivityFragment extends Fragment {
 
     TextView orderNumber, orderStatus, orderTimePlased, orderTimeConfirmed, orderTimeProcessed, orderTimeReady;
+    SwipeRefreshLayout swipeRefreshLayout;
     OrderContentAdapter adapter;
+    OrderStatusViewModel viewModel;
 
     public OrderStatusActivityFragment() {
     }
@@ -35,6 +37,8 @@ public class OrderStatusActivityFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.fragment_order_info, container, false);
+        swipeRefreshLayout = fragmentView.findViewById(R.id.swipe);
+        swipeRefreshLayout.setOnRefreshListener(() -> viewModel.updateOrderStatus());
         orderNumber = fragmentView.findViewById(R.id.order_number);
         orderStatus = fragmentView.findViewById(R.id.order_time);
         orderTimePlased = fragmentView.findViewById(R.id.order_status_placed_time);
@@ -50,9 +54,12 @@ public class OrderStatusActivityFragment extends Fragment {
     }
 
     private void setupViewModel() {
-        OrderStatusViewModel viewModel = ViewModelProviders.of(requireActivity()).get(OrderStatusViewModel.class);
+        viewModel = ViewModelProviders.of(requireActivity()).get(OrderStatusViewModel.class);
         MutableLiveData<OrderWithFood> order = viewModel.getOrder();
         order.observe(this, order1 -> {
+            if (swipeRefreshLayout.isRefreshing()) {
+                swipeRefreshLayout.setRefreshing(false);
+            }
             if (order1 == null) {
                 orderNumber.setText("#");
                 orderStatus.setText(R.string.order_number_invalid);
@@ -62,8 +69,7 @@ public class OrderStatusActivityFragment extends Fragment {
                 adapter.initialize(order1);
             }
         });
-        MutableLiveData<List<OrderStatusEntry>> statuses = viewModel.getStatuses();
-        statuses.observe(this, orderStatusEntries -> {
+        viewModel.getStatuses().observe(this, orderStatusEntries -> {
             if (orderStatusEntries == null || orderStatusEntries.size() == 0) {
                 orderTimePlased.setText("");
                 orderTimeConfirmed.setText("");

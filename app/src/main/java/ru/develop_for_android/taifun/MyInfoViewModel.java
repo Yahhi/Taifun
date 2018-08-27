@@ -3,6 +3,7 @@ package ru.develop_for_android.taifun;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -19,7 +20,7 @@ public class MyInfoViewModel extends AndroidViewModel {
 
     private String userName;
     private String userPhone;
-    private int defaultAddressId;
+    private MutableLiveData<Integer> defaultAddressId;
     private LiveData<List<AddressEntry>> addresses;
 
     public MyInfoViewModel(@NonNull Application application) {
@@ -27,7 +28,8 @@ public class MyInfoViewModel extends AndroidViewModel {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getApplication());
         userName = preferences.getString(NAME_KEY, "Name");
         userPhone = preferences.getString(PHONE_KEY, "Phone");
-        defaultAddressId = preferences.getInt(DEFAULT_ADDRESS_ID_KEY, -1);
+        defaultAddressId = new MutableLiveData<>();
+        defaultAddressId.postValue(preferences.getInt(DEFAULT_ADDRESS_ID_KEY, -1));
 
         AppDatabase database = AppDatabase.getInstance(this.getApplication());
         addresses = database.foodDao().getActualAddresses();
@@ -54,11 +56,15 @@ public class MyInfoViewModel extends AndroidViewModel {
     }
 
     public void setDefaultAddressId(int id) {
-        this.defaultAddressId = id;
+        this.defaultAddressId.postValue(id);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getApplication());
         SharedPreferences.Editor prefEditor = preferences.edit();
         prefEditor.putInt(DEFAULT_ADDRESS_ID_KEY, id);
         prefEditor.apply();
+    }
+
+    public MutableLiveData<Integer> getDefaultAddressId() {
+        return defaultAddressId;
     }
 
     public String getUserName() {
@@ -67,5 +73,15 @@ public class MyInfoViewModel extends AndroidViewModel {
 
     public String getUserPhone() {
         return userPhone;
+    }
+
+    public void deleteAddress(AddressEntry address) {
+
+        AppExecutors.getInstance().diskIO().execute(() -> AppDatabase
+                .getInstance(getApplication()).foodDao().makeAddressInvisible(address));
+    }
+
+    public void updateAddress(AddressEntry addressEntry) {
+        AppExecutors.getInstance().diskIO().execute(() -> AppDatabase.getInstance(getApplication()).foodDao().updateAddress(addressEntry));
     }
 }

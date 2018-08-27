@@ -75,9 +75,9 @@ public class OrderConfirmationActivity extends AppCompatActivity {
                 adapter.initialize(orderWithFood);
                 int dishes = orderWithFood.getItemsCount();
                 dishesCount.setText(getResources().getQuantityString(R.plurals.dishes_count, dishes, dishes));
-                if (selectedAddressId == -1) {
+                /*if (selectedAddressId == -1) {
                     selectedAddressId = orderWithFood.getOrderEntry().getAddressId();
-                }
+                }*/
             }
         });
         viewModel.selectedAddress.observe(this, addressEntry -> {

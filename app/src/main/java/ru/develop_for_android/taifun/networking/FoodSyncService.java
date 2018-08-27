@@ -20,6 +20,9 @@ import ru.develop_for_android.taifun.data.PromoEntry;
 public class FoodSyncService extends JobIntentService {
     public static final int jobId = 1234;
     FirebaseFirestore remoteDb;
+    public static final String KEY_JOB_TYPE = "job_type";
+    public static final String TYPE_FOOD = "food";
+    public static final String TYPE_PROMO = "promo";
 
     public FoodSyncService() {
         remoteDb = FirebaseFirestore.getInstance();
@@ -27,19 +30,19 @@ public class FoodSyncService extends JobIntentService {
 
     @Override
     protected void onHandleWork(@NonNull Intent intent) {
-        syncFood();
+        if (intent.hasExtra(KEY_JOB_TYPE)) {
+            if (intent.getStringExtra(KEY_JOB_TYPE).equals(TYPE_FOOD)) {
+                syncFood();
+            } else {
+                syncPromo();
+            }
+        } else {
+            syncFood();
+            syncPromo();
+        }
     }
 
-    void syncFood() {
-        remoteDb.collection("categories")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document :task.getResult()) {
-                            saveCategory(document);
-                        }
-                    }
-                });
+    private void syncPromo() {
         remoteDb.collection("promo")
                 .get()
                 .addOnCompleteListener(task -> {
@@ -51,6 +54,18 @@ public class FoodSyncService extends JobIntentService {
                         AppExecutors.getInstance().diskIO().execute(() ->
                                 AppDatabase.getInstance(getBaseContext()).foodDao()
                                         .addDownloadedPromoInfo(promoEntries, null));
+                    }
+                });
+    }
+
+    void syncFood() {
+        remoteDb.collection("categories")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document :task.getResult()) {
+                            saveCategory(document);
+                        }
                     }
                 });
     }

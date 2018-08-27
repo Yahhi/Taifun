@@ -143,9 +143,9 @@ public abstract class FoodDao {
     abstract List<FoodWithCount> getFoodListInOrder(long orderId);
 
     @Query("SELECT * FROM order_status WHERE order_id = :orderId ORDER BY status ASC")
-    public abstract List<OrderStatusEntry> getOrderStatuses(long orderId);
+    public abstract LiveData<List<OrderStatusEntry>> getOrderStatuses(long orderId);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     public abstract void addOrderStatus(OrderStatusEntry statusEntry);
 
     @Query("SELECT * FROM promo")
@@ -206,4 +206,9 @@ public abstract class FoodDao {
             return actualPriceWithPercent;
     }
 
+    @Query("UPDATE orders SET global_number = :remoteId WHERE id = :localId")
+    public abstract void updateRemoteId(int localId, long remoteId);
+
+    @Query("UPDATE orders SET status = :orderStatus WHERE id = :orderId")
+    public abstract void updateOrderStatus(int orderId, int orderStatus);
 }

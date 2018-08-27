@@ -3,11 +3,9 @@ package ru.develop_for_android.taifun;
 
 import android.app.AlertDialog;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,7 +27,7 @@ import ru.develop_for_android.taifun.data.AppDatabase;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyInfoFragment extends Fragment {
+public class MyInfoFragment extends Fragment implements AddressChangesListener {
 
     private AddressesAdapter adapter;
     MyInfoViewModel viewModel;
@@ -45,7 +43,7 @@ public class MyInfoFragment extends Fragment {
         View fragmentView = inflater.inflate(R.layout.fragment_my_info, container, false);
 
         RecyclerView addressesList = fragmentView.findViewById(R.id.my_addresses_list);
-        adapter = new AddressesAdapter();
+        adapter = new AddressesAdapter(requireContext(), this);
         addressesList.setAdapter(adapter);
         addressesList.setLayoutManager(new LinearLayoutManager(fragmentView.getContext()));
 
@@ -111,14 +109,22 @@ public class MyInfoFragment extends Fragment {
     private void setupViewModel() {
         viewModel = ViewModelProviders.of(this).get(MyInfoViewModel.class);
         LiveData<List<AddressEntry>> addresses = viewModel.getAddresses();
-        addresses.observe(this, new Observer<List<AddressEntry>>() {
-            @Override
-            public void onChanged(@Nullable List<AddressEntry> addressEntries) {
-                adapter.initialize(addressEntries);
-                addresses.removeObserver(this);
-            }
-        });
-
+        addresses.observe(this, addressEntries -> adapter.initialize(addressEntries));
+        viewModel.getDefaultAddressId().observe(this, integer -> adapter.initialize(integer));
     }
 
+    @Override
+    public void deleteAddress(AddressEntry address) {
+        viewModel.deleteAddress(address);
+    }
+
+    @Override
+    public void makeAddressDefault(int addressId) {
+        viewModel.setDefaultAddressId(addressId);
+    }
+
+    @Override
+    public void editAddress(AddressEntry addressEntry) {
+        viewModel.updateAddress(addressEntry);
+    }
 }

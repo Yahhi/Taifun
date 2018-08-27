@@ -51,7 +51,8 @@ public class OrderConfirmationViewModel extends AndroidViewModel {
     }
 
     public void finishOrder(String additionalInfo, Date schedule) {
-        OrderEntry order = unfinishedOrder.getValue().getOrderEntry();
+        OrderWithFood orderWithFood = unfinishedOrder.getValue();
+        OrderEntry order = orderWithFood.getOrderEntry();
         order.setComment(additionalInfo);
         order.setDateStamp(new Date().getTime());
         order.setAddressId(selectedAddressId.getValue());
@@ -61,13 +62,10 @@ public class OrderConfirmationViewModel extends AndroidViewModel {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getApplication());
         order.setPerson(preferences.getString(MyInfoViewModel.NAME_KEY, "-"));
         order.setPhone(preferences.getString(MyInfoViewModel.PHONE_KEY, "-"));
-        AppExecutors.getInstance().diskIO().execute(() -> {
-            finishedId.postValue(AppDatabase.getInstance(getApplication()).foodDao().finishOrder(order, getApplication()));
-            sendNetworkRequest(order);
-        });
+        sendNetworkRequest(orderWithFood);
     }
 
-    private void sendNetworkRequest(OrderEntry order) {
+    private void sendNetworkRequest(OrderWithFood order) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://178.206.238.2:3444/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -80,17 +78,23 @@ public class OrderConfirmationViewModel extends AndroidViewModel {
         remoteId.enqueue(new Callback<Long>() {
 
             @Override
-            public void onResponse(Call<Long> call, Response<Long> response) {
+            public void onResponse(@NonNull Call<Long> call, @NonNull Response<Long> response) {
                 if (response.isSuccessful()) {
                     Log.i("NETWORK", String.valueOf(response.body()));
+                    AppExecutors.getInstance().diskIO().execute(() -> {
+                        AppDatabase.getInstance(getApplication()).foodDao()
+                                .updateRemoteId(order.getOrderEntry().getId(), response.body());
+                        finishedId.postValue(AppDatabase.getInstance(getApplication()).foodDao()
+                                .finishOrder(order.getOrderEntry(), getApplication()));
+                    });
                 } else {
                     Log.i("NETWORK", "response code: " + response.code());
                 }
             }
 
             @Override
-            public void onFailure(Call<Long> call, Throwable t) {
-                Log.i("NETWORK", "failure " + t);
+            public void onFailure(@NonNull Call<Long> call, @NonNull Throwable t) {
+                Log.i("NETWORK", "failure " + t.getMessage());
             }
         });
     }

@@ -1,23 +1,31 @@
 package ru.develop_for_android.taifun;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import java.util.List;
 
 import ru.develop_for_android.taifun.data.AddressEntry;
-import ru.develop_for_android.taifun.data.AppDatabase;
 
 public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.ViewHolder> {
 
     private List<AddressEntry> addresses;
+    private int defaultAddressId;
+    private AddressChangesListener listener;
+    private Context context;
+
+    public AddressesAdapter(Context context, AddressChangesListener listener) {
+        this.listener = listener;
+        this.context = context;
+    }
 
     @NonNull
     @Override
@@ -51,45 +59,77 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.View
         notifyItemInserted(addresses.size() - 1);
     }
 
+    public void initialize(Integer defaultId) {
+        int oldPosition = -1;
+        if (addresses != null) {
+            for (int i = 0; i < addresses.size(); i++) {
+                if (addresses.get(i).getId() == this.defaultAddressId) {
+                    oldPosition = i;
+                    break;
+                }
+            }
+            this.defaultAddressId = defaultId;
+            if (oldPosition != -1) {
+                notifyItemChanged(oldPosition);
+            }
+            for (int i = 0; i < addresses.size(); i++) {
+                if (addresses.get(i).getId() == defaultId) {
+                    notifyItemChanged(i);
+                    break;
+                }
+            }
+        }
+
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
 
         private AddressEntry addressValue;
 
-        final TextInputEditText addressText;
+        final TextView addressTitle;
+        final TextView addressText;
         final ImageButton deleteButton;
+        final ImageButton editButton;
+        final ImageButton starButton;
 
         ViewHolder(View itemView) {
             super(itemView);
-            addressText = itemView.findViewById(R.id.my_address_in_list);
-            addressText.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            addressText = itemView.findViewById(R.id.address_line);
+            addressTitle = itemView.findViewById(R.id.address_title);
 
-                }
+            deleteButton = itemView.findViewById(R.id.address_delete);
+            deleteButton.setOnClickListener(v -> listener.deleteAddress(addressValue));
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    addressValue.setAddressLine1(s.toString());
-                    AppExecutors.getInstance().diskIO().execute(() -> AppDatabase.getInstance(addressText.getContext()).foodDao().updateAddress(addressValue));
-                }
+            editButton = itemView.findViewById(R.id.address_edit);
+            editButton.setOnClickListener(v -> {
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+                dialogBuilder.setTitle(addressValue.getTitle());
+                dialogBuilder.setMessage("Address:");
+                EditText input = new EditText(context);
+                dialogBuilder.setView(input);
+                dialogBuilder.setPositiveButton("Add", (dialog, which) -> {
+                    addressValue.setAddressLine1(input.getText().toString());
+                    listener.editAddress(addressValue);
+                });
+                dialogBuilder.setCancelable(true);
+                dialogBuilder.create().show();
             });
-            deleteButton = itemView.findViewById(R.id.my_address_in_list_delete);
-            deleteButton.setOnClickListener(v -> {
-                AppExecutors.getInstance().diskIO().execute(() -> AppDatabase.getInstance(v.getContext()).foodDao().makeAddressInvisible(addressValue));
-                addresses.remove(addressValue);
-                notifyDataSetChanged();
-            });
+
+            starButton = itemView.findViewById(R.id.address_star);
+            starButton.setOnClickListener(v -> listener.makeAddressDefault(addressValue.getId()));
         }
 
         void onBind(AddressEntry addressValue) {
             this.addressValue = addressValue;
-            addressText.setHint(addressValue.getTitle());
+            addressTitle.setText(addressValue.getTitle());
             addressText.setText(addressValue.getAddressLine1());
+            if (defaultAddressId == addressValue.getId()) {
+                starButton.setEnabled(false);
+                starButton.setImageResource(R.drawable.ic_super_star);
+            } else {
+                starButton.setEnabled(true);
+                starButton.setImageResource(R.drawable.ic_star);
+            }
         }
     }
 }

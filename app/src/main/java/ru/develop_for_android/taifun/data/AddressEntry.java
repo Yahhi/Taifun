@@ -33,4 +33,12 @@ public class AddressEntry {
     public void setAddressLine1(String addressLine1) {
         this.addressLine1 = addressLine1;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    void setId(int id) {
+        this.id = id;
+    }
 }

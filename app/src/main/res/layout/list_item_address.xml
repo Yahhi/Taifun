@@ -1,26 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:orientation="horizontal"
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-
-    <android.support.design.widget.TextInputLayout
+    <TextView
+        android:id="@+id/address_title"
         android:layout_width="0dp"
-        android:layout_weight="5"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_weight="1"
+        app:layout_constraintEnd_toStartOf="@+id/address_star"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Home" />
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/my_address_in_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
-    </android.support.design.widget.TextInputLayout>
+    <TextView
+        android:id="@+id/address_line"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_weight="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/address_star"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/address_title"
+        tools:text="Mira 33" />
 
     <ImageButton
-        android:id="@+id/my_address_in_list_delete"
+        android:contentDescription="@string/delete_address"
+        android:id="@+id/address_delete"
         android:layout_width="0dp"
-        android:layout_weight="1"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_delete"/>
-</LinearLayout>
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:src="@drawable/ic_delete"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:contentDescription="@string/edit_address"
+        android:id="@+id/address_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/address_delete"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_edit" />
+
+    <ImageButton
+        android:contentDescription="@string/make_address_default"
+        android:id="@+id/address_star"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/address_edit"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_star" />
+</android.support.constraint.ConstraintLayout>

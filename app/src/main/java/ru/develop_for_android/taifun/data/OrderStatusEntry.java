@@ -11,12 +11,12 @@ import java.util.Date;
 
 @Entity(tableName = "order_status",
         foreignKeys = {@ForeignKey(entity = OrderEntry.class, childColumns = "order_id", parentColumns = "id")},
-        indices = {@Index("order_id")})
+        indices = {@Index("order_id"), @Index(value = {"order_id", "status"}, unique = true)})
 public class OrderStatusEntry {
     @PrimaryKey(autoGenerate = true)
     long id;
     @ColumnInfo(name = "order_id")
-    String orderId;
+    int orderId;
     int status;
     long timestamp;
     int timeTillReady;
@@ -26,7 +26,7 @@ public class OrderStatusEntry {
     }
 
     @Ignore
-    public OrderStatusEntry(String orderId, int status, int timeTillReady) {
+    public OrderStatusEntry(int orderId, int status, int timeTillReady) {
         this.orderId = orderId;
         this.status = status;
         this.timeTillReady = timeTillReady;

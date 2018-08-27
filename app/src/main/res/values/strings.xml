@@ -36,7 +36,7 @@
     <string name="order_processed">Order processed</string>
     <string name="ready_to_pickup">Ready to pickup</string>
     <string name="order_number_invalid">invalid order number</string>
-    <string name="order_number"># %1$s</string>
+    <string name="order_number"># %1$d</string>
     <string name="title_activity_order_details">Order details</string>
     <string name="subtotal">Subtotal:</string>
     <string name="discount">Discount:</string>
@@ -60,6 +60,9 @@
     <string name="free">free</string>
     <string name="food_list_is_not_ready_yet">Food list is not ready yet</string>
     <string name="how_about_taifun_food">How about Taifun food?</string>
+    <string name="delete_address">Delete address</string>
+    <string name="make_address_default">make address default</string>
+    <string name="add_address">Add address</string>
     <plurals name="dishes_count">
         <item quantity="zero">No dishes in order</item>
         <item quantity="one">%1$d dish in order</item>
