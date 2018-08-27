@@ -21,16 +21,19 @@ import ru.develop_for_android.taifun.networking.RemoteApi;
 
 public class OrderStatusViewModel extends ViewModel
 {
+    public static final String RESULT_SUCCESS = "success";
     private MutableLiveData<OrderWithFood> order;
     private LiveData<List<OrderStatusEntry>> statuses;
     private AppDatabase database;
     private final int orderId;
+    private MutableLiveData<String> networkResult;
 
     public OrderStatusViewModel(@NonNull AppDatabase database, int orderId) {
         this.database = database;
         this.orderId = orderId;
         order = new MutableLiveData<>();
         statuses = database.foodDao().getOrderStatuses(orderId);
+        networkResult = new MutableLiveData<>();
         computeOrderData();
     }
 
@@ -69,20 +72,27 @@ public class OrderStatusViewModel extends ViewModel
                         database.foodDao().addOrderStatus(statusEntry);
                         database.foodDao().updateOrderStatus(orderId, response.body());
                         computeOrderData();
+                        networkResult.postValue(RESULT_SUCCESS);
                     });
                 } else {
                     Log.i("NETWORK", "response code: " + response.code());
+                    networkResult.postValue(response.message());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<Integer> call, @NonNull Throwable t) {
                 Log.i("NETWORK", "failure " + t.getMessage());
+                networkResult.postValue(t.getLocalizedMessage());
             }
         });
     }
 
     public LiveData<List<OrderStatusEntry>> getStatuses() {
         return statuses;
+    }
+
+    public MutableLiveData<String> getNetworkResult() {
+        return networkResult;
     }
 }

@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -57,9 +58,6 @@ public class OrderStatusActivityFragment extends Fragment {
         viewModel = ViewModelProviders.of(requireActivity()).get(OrderStatusViewModel.class);
         MutableLiveData<OrderWithFood> order = viewModel.getOrder();
         order.observe(this, order1 -> {
-            if (swipeRefreshLayout.isRefreshing()) {
-                swipeRefreshLayout.setRefreshing(false);
-            }
             if (order1 == null) {
                 orderNumber.setText("#");
                 orderStatus.setText(R.string.order_number_invalid);
@@ -67,6 +65,15 @@ public class OrderStatusActivityFragment extends Fragment {
                 orderNumber.setText(getString(R.string.order_number, order1.getOrderEntry().getGlobalNumber()));
                 orderStatus.setText(OrderEntry.getStatusReadable(order1.getOrderEntry().getStatus()));
                 adapter.initialize(order1);
+            }
+        });
+        viewModel.getNetworkResult().observe(this, s -> {
+            if (s != null) {
+                if (s.equals(OrderStatusViewModel.RESULT_SUCCESS)) {
+                    swipeRefreshLayout.setRefreshing(false);
+                } else {
+                    Toast.makeText(requireContext(), s, Toast.LENGTH_LONG).show();
+                }
             }
         });
         viewModel.getStatuses().observe(this, orderStatusEntries -> {

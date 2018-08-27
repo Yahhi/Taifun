@@ -97,6 +97,12 @@ public class OrderConfirmationActivity extends AppCompatActivity {
                 startActivity(openOrderStatus);
             }
         });
+
+        viewModel.networkResult.observe(this, s -> {
+            if (s != null) {
+                Toast.makeText(getBaseContext(), s, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 }

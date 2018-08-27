@@ -78,6 +78,8 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.View
                     break;
                 }
             }
+        } else {
+            this.defaultAddressId = defaultId;
         }
 
     }
@@ -104,10 +106,10 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.View
             editButton.setOnClickListener(v -> {
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
                 dialogBuilder.setTitle(addressValue.getTitle());
-                dialogBuilder.setMessage("Address:");
+                dialogBuilder.setMessage(R.string.address_s);
                 EditText input = new EditText(context);
                 dialogBuilder.setView(input);
-                dialogBuilder.setPositiveButton("Add", (dialog, which) -> {
+                dialogBuilder.setPositiveButton(R.string.update, (dialog, which) -> {
                     addressValue.setAddressLine1(input.getText().toString());
                     listener.editAddress(addressValue);
                 });

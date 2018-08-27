@@ -63,6 +63,8 @@
     <string name="delete_address">Delete address</string>
     <string name="make_address_default">make address default</string>
     <string name="add_address">Add address</string>
+    <string name="update">Update</string>
+    <string name="address_s">Address:</string>
     <plurals name="dishes_count">
         <item quantity="zero">No dishes in order</item>
         <item quantity="one">%1$d dish in order</item>

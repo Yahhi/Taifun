@@ -31,6 +31,9 @@ public class OrderConfirmationViewModel extends AndroidViewModel {
     LiveData<AddressEntry> selectedAddress;
     MutableLiveData<Integer> selectedAddressId;
     MutableLiveData<Integer> finishedId;
+    MutableLiveData<String> networkResult;
+
+    public static final String RESULT_OK = "success";
 
     public OrderConfirmationViewModel(@NonNull Application application) {
         super(application);
@@ -48,6 +51,7 @@ public class OrderConfirmationViewModel extends AndroidViewModel {
         selectedAddress = Transformations.switchMap(selectedAddressId,
                 id -> AppDatabase.getInstance(getApplication()).foodDao().getAddress(id));
         finishedId = new MutableLiveData<>();
+        networkResult = new MutableLiveData<>();
     }
 
     public void finishOrder(String additionalInfo, Date schedule) {
@@ -79,7 +83,7 @@ public class OrderConfirmationViewModel extends AndroidViewModel {
 
             @Override
             public void onResponse(@NonNull Call<Long> call, @NonNull Response<Long> response) {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && (response.body() != null)) {
                     Log.i("NETWORK", String.valueOf(response.body()));
                     AppExecutors.getInstance().diskIO().execute(() -> {
                         AppDatabase.getInstance(getApplication()).foodDao()
@@ -89,12 +93,14 @@ public class OrderConfirmationViewModel extends AndroidViewModel {
                     });
                 } else {
                     Log.i("NETWORK", "response code: " + response.code());
+                    networkResult.postValue(response.message());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<Long> call, @NonNull Throwable t) {
                 Log.i("NETWORK", "failure " + t.getMessage());
+                networkResult.postValue(t.getLocalizedMessage());
             }
         });
     }
