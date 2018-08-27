@@ -6,10 +6,14 @@
     android:layout_height="match_parent"
     android:id="@+id/swipe"
     tools:context=".OrderStatusActivityFragment">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp">
 
     <TextView
         android:id="@+id/order_number"
@@ -169,5 +173,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/text_pickup_ready"
         tools:text="12:20" />
-</android.support.constraint.ConstraintLayout>
+</android.support.constraint.ConstraintLayout></ScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>
