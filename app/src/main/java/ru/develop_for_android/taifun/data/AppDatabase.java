@@ -6,7 +6,6 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import ru.develop_for_android.taifun.AppExecutors;
 import ru.develop_for_android.taifun.R;
@@ -26,7 +25,6 @@ public abstract class AppDatabase extends RoomDatabase {
     public static AppDatabase getInstance(Context context) {
         if (sInstance == null) {
             synchronized (LOCK) {
-                Log.d(LOG_TAG, "Creating new database instance");
                 sInstance = Room.databaseBuilder(context.getApplicationContext(),
                         AppDatabase.class, AppDatabase.DATABASE_NAME)
                         .addCallback(new Callback() {
@@ -44,7 +42,6 @@ public abstract class AppDatabase extends RoomDatabase {
                         .build();
             }
         }
-        Log.d(LOG_TAG, "Getting the database instance");
         return sInstance;
     }
 

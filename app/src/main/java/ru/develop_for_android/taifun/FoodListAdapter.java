@@ -3,7 +3,6 @@ package ru.develop_for_android.taifun;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,7 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.ViewHo
     private FoodClickListener listener;
     private Context context;
 
-    public FoodListAdapter(FoodClickListener listener, Context context) {
+    FoodListAdapter(FoodClickListener listener, Context context) {
         this.listener = listener;
         this.context = context;
     }
@@ -43,7 +42,6 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.onBind(foodEntries.get(position));
-        Log.i("FOOD", "binding food " + foodEntries.get(position).getTitle());
     }
 
     @Override
@@ -63,7 +61,7 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.ViewHo
         private final TextView mPrice;
         private final TextView mIngredients;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             mImage = itemView.findViewById(R.id.food_info_image);
             mTitle = itemView.findViewById(R.id.food_info_title);
@@ -78,7 +76,6 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.ViewHo
             mPrice.setText(foodEntry.getReadablePrice(context));
             mIngredients.setText(foodEntry.getReadableIngredientsList());
             Glide.with(mImage.getContext()).load(foodEntry.getImageAddressNetwork()).into(mImage);
-            Log.i("FOOD", "loading " + foodEntry.getImageAddressNetwork());
         }
     }
 }

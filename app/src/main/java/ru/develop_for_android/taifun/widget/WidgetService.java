@@ -4,7 +4,6 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -28,12 +27,11 @@ public class WidgetService extends RemoteViewsService {
         private Context mContext;
         private int mAppWidgetId;
 
-        public WidgetViewsFactory(Context context, Intent intent) {
+        WidgetViewsFactory(Context context, Intent intent) {
             mContext = context;
             mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
             fileAddresses = intent.getStringArrayListExtra(KEY_FILES);
-            Log.i("WIDGET", "creating widget from factory with " + fileAddresses.size());
         }
 
         @Override

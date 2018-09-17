@@ -8,21 +8,20 @@ import android.arch.lifecycle.Transformations;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.util.Log;
+
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import ru.develop_for_android.taifun.data.AddressEntry;
 import ru.develop_for_android.taifun.data.AppDatabase;
+import ru.develop_for_android.taifun.data.FoodWithCount;
 import ru.develop_for_android.taifun.data.OrderEntry;
 import ru.develop_for_android.taifun.data.OrderWithFood;
-import ru.develop_for_android.taifun.networking.RemoteApi;
+import timber.log.Timber;
 
 public class OrderConfirmationViewModel extends AndroidViewModel {
 
@@ -44,10 +43,9 @@ public class OrderConfirmationViewModel extends AndroidViewModel {
         addresses = AppDatabase.getInstance(getApplication()).foodDao().getActualAddresses();
 
         selectedAddressId = new MutableLiveData<>();
-        AppExecutors.getInstance().diskIO().execute(() -> {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getApplication());
-            selectedAddressId.postValue(preferences.getInt(MyInfoViewModel.DEFAULT_ADDRESS_ID_KEY, -100));
-        });
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getApplication());
+        selectedAddressId.postValue(preferences.getInt(MyInfoViewModel.DEFAULT_ADDRESS_ID_KEY, -100));
+
         selectedAddress = Transformations.switchMap(selectedAddressId,
                 id -> AppDatabase.getInstance(getApplication()).foodDao().getAddress(id));
         finishedId = new MutableLiveData<>();
@@ -55,6 +53,16 @@ public class OrderConfirmationViewModel extends AndroidViewModel {
     }
 
     public void finishOrder(String additionalInfo, Date schedule) {
+        if (selectedAddressId.getValue() == null) {
+            networkResult.postValue(getApplication().getString(R.string.no_selected_address));
+            return;
+        }
+        if (unfinishedOrder.getValue() == null || selectedAddressId.getValue() == null) {
+            networkResult.postValue(getApplication().getString(R.string.order_is_not_ready));
+            Timber.w("No correct value while confirming order");
+            return;
+        }
+
         OrderWithFood orderWithFood = unfinishedOrder.getValue();
         OrderEntry order = orderWithFood.getOrderEntry();
         order.setComment(additionalInfo);
@@ -66,42 +74,63 @@ public class OrderConfirmationViewModel extends AndroidViewModel {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getApplication());
         order.setPerson(preferences.getString(MyInfoViewModel.NAME_KEY, "-"));
         order.setPhone(preferences.getString(MyInfoViewModel.PHONE_KEY, "-"));
-        sendNetworkRequest(orderWithFood);
+
+        String address;
+        if (selectedAddressId.getValue() == OrderEntry.NO_DELIVERY) {
+            address = "pick-up";
+        } else {
+            address = selectedAddress.getValue().getAddressLine1();
+        }
+        saveOrderInCloud(orderWithFood, address);
     }
 
-    private void sendNetworkRequest(OrderWithFood order) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://178.206.238.2:3444/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+    private void saveOrderInCloud(OrderWithFood order, String address) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("name", order.getOrderEntry().getPerson());
+        data.put("address", address);
+        data.put("phone", order.getOrderEntry().getPhone());
+        data.put("comment", order.getOrderEntry().getComment());
 
-        RemoteApi api = retrofit.create(RemoteApi.class);
-
-        Call<Long> remoteId = api.sendOrder(order);
-
-        remoteId.enqueue(new Callback<Long>() {
-
-            @Override
-            public void onResponse(@NonNull Call<Long> call, @NonNull Response<Long> response) {
-                if (response.isSuccessful() && (response.body() != null)) {
-                    Log.i("NETWORK", String.valueOf(response.body()));
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("orders")
+                .add(data)
+                .addOnSuccessListener(documentReference -> {
+                    String remoteId = documentReference.getId();
+                    Timber.i("order entry added with ID: %s", remoteId);
                     AppExecutors.getInstance().diskIO().execute(() -> {
                         AppDatabase.getInstance(getApplication()).foodDao()
-                                .updateRemoteId(order.getOrderEntry().getId(), response.body());
+                                .updateRemoteId(order.getOrderEntry().getId(), remoteId);
                         finishedId.postValue(AppDatabase.getInstance(getApplication()).foodDao()
                                 .finishOrder(order.getOrderEntry(), getApplication()));
                     });
-                } else {
-                    Log.i("NETWORK", "response code: " + response.code());
-                    networkResult.postValue(response.message());
-                }
-            }
+                    saveFoodInOrder(order, remoteId);
+                })
+                .addOnFailureListener(e -> {
+                    Timber.w(e);
+                    networkResult.postValue(e.getLocalizedMessage());
+                });
+    }
 
-            @Override
-            public void onFailure(@NonNull Call<Long> call, @NonNull Throwable t) {
-                Log.i("NETWORK", "failure " + t.getMessage());
-                networkResult.postValue(t.getLocalizedMessage());
-            }
-        });
+    private void saveFoodInOrder(OrderWithFood order, String documentId) {
+        for (FoodWithCount foodInOrder : order.getFoodInOrder()) {
+            Map<String, Object> data = new HashMap<>();
+            data.put("foodId", foodInOrder.getId());
+            data.put("categoryId", foodInOrder.getCategoryId());
+            data.put("count", foodInOrder.getCount());
+            data.put("price", foodInOrder.getPrice());
+            data.put("discount", foodInOrder.getDiscount());
+
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("orders").document(documentId).collection("food")
+                    .add(data)
+                    .addOnSuccessListener(documentReference -> {
+                        String remoteId = documentReference.getId();
+                        Timber.i("food entry added written with ID: %s", remoteId);
+                    })
+                    .addOnFailureListener(e -> {
+                        Timber.w(e);
+                        networkResult.postValue(e.getLocalizedMessage());
+                    });
+        }
     }
 }

@@ -8,7 +8,6 @@ import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Transaction;
 import android.arch.persistence.room.Update;
 import android.content.Context;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,7 +132,6 @@ public abstract class FoodDao {
             List<FoodWithCount> foodEntries = getFoodListInOrder(order.id);
             ordersWithFood.add(new OrderWithFood(order, foodEntries));
         }
-        Log.i("ORDERS", "there are " + ordersWithFood.size() + " orders");
         return ordersWithFood;
     }
 
@@ -207,7 +205,7 @@ public abstract class FoodDao {
     }
 
     @Query("UPDATE orders SET global_number = :remoteId WHERE id = :localId")
-    public abstract void updateRemoteId(int localId, long remoteId);
+    public abstract void updateRemoteId(int localId, String remoteId);
 
     @Query("UPDATE orders SET status = :orderStatus WHERE id = :orderId")
     public abstract void updateOrderStatus(int orderId, int orderStatus);

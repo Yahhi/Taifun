@@ -8,7 +8,6 @@ import android.arch.lifecycle.Transformations;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,6 @@ public class OrderListViewModel extends AndroidViewModel {
                                 .foodDao().getOrdersWithFood(o);
                     if (rrr != null) {
                         orders.postValue(rrr);
-                        Log.i("FOOD","orders calculated in background " + rrr.size());
                     }
             });
             return 1;

@@ -4,7 +4,6 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import java.util.ArrayList;
@@ -24,7 +23,6 @@ public class FoodListWidget extends AppWidgetProvider {
         // Here we setup the intent which points to the StackViewService which will
         // provide the views for this collection.
         AppExecutors.getInstance().diskIO().execute(() -> {
-            Log.i("WIDGET", "getting database values");
             food = AppDatabase.getInstance(context).foodDao().getRandomFood();
             Intent intent = new Intent(context, WidgetService.class);
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);

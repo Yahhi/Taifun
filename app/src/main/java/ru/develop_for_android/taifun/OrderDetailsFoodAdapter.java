@@ -3,7 +3,6 @@ package ru.develop_for_android.taifun;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +20,9 @@ public class OrderDetailsFoodAdapter extends RecyclerView.Adapter<OrderDetailsFo
 
     private List<FoodWithCount> food;
     private Context context;
-    AddRemoveListener listener;
+    private AddRemoveListener listener;
 
-    public OrderDetailsFoodAdapter(Context context, AddRemoveListener listener) {
+    OrderDetailsFoodAdapter(Context context, AddRemoveListener listener) {
         this.context = context;
         this.listener = listener;
     }
@@ -44,7 +43,6 @@ public class OrderDetailsFoodAdapter extends RecyclerView.Adapter<OrderDetailsFo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.onBind(food.get(position));
-        Log.i("FOOD", "binding food " + food.get(position).getTitle());
     }
 
     @Override
@@ -68,7 +66,7 @@ public class OrderDetailsFoodAdapter extends RecyclerView.Adapter<OrderDetailsFo
         private final ImageButton mIncrement;
         private final ImageButton mDecrement;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             mImage = itemView.findViewById(R.id.food_info_image);
             mTitle = itemView.findViewById(R.id.food_info_title);
@@ -91,7 +89,6 @@ public class OrderDetailsFoodAdapter extends RecyclerView.Adapter<OrderDetailsFo
             mCount.setText(context.getResources().getQuantityString(R.plurals.pcs, count, count));
             mTotalPrice.setText(foodEntry.getFinalPrice(context));
             Glide.with(mImage.getContext()).load(foodEntry.getImageAddressNetwork()).into(mImage);
-            Log.i("FOOD", "loading " + foodEntry.getImageAddressNetwork());
         }
     }
 }

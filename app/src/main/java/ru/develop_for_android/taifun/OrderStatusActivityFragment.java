@@ -39,7 +39,7 @@ public class OrderStatusActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.fragment_order_info, container, false);
         swipeRefreshLayout = fragmentView.findViewById(R.id.swipe);
-        swipeRefreshLayout.setOnRefreshListener(() -> viewModel.updateOrderStatus());
+        //swipeRefreshLayout.setOnRefreshListener(() -> viewModel.updateOrderStatus());
         orderNumber = fragmentView.findViewById(R.id.order_number);
         orderStatus = fragmentView.findViewById(R.id.order_time);
         orderTimePlased = fragmentView.findViewById(R.id.order_status_placed_time);

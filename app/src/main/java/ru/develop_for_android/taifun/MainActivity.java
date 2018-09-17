@@ -18,7 +18,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
@@ -27,6 +26,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import ru.develop_for_android.taifun.networking.FoodSyncService;
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -88,12 +88,12 @@ public class MainActivity extends AppCompatActivity
         final CollectionReference foodRef = db.collection("categories");
         foodRef.addSnapshotListener((queryDocumentSnapshots, e) -> {
             if (e != null) {
-                Log.w("FIREBASE", "Listen failed.", e);
+                Timber.w(e, "Listen failed.");
                 return;
             }
 
             if (queryDocumentSnapshots != null) {
-                Log.d("FIREBASE", "Updates found");
+                Timber.d("Updates found");
 
                 Intent bundle = new Intent();
                 bundle.putExtra(FoodSyncService.KEY_JOB_TYPE, FoodSyncService.TYPE_FOOD);
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity
                         FoodSyncService.class, FoodSyncService.jobId,
                         bundle);
             } else {
-                Log.d("FIREBASE", "Current data: null");
+                Timber.d("Current data: null");
             }
 
         });
@@ -109,12 +109,12 @@ public class MainActivity extends AppCompatActivity
         final CollectionReference promoRef = db.collection("promo");
         promoRef.addSnapshotListener((queryDocumentSnapshots, e) -> {
             if (e != null) {
-                Log.w("FIREBASE", "Listen failed.", e);
+                Timber.tag("FIREBASE").w(e, "Listen failed.");
                 return;
             }
 
             if (queryDocumentSnapshots != null) {
-                Log.d("FIREBASE", "Updates found");
+                Timber.d("Updates found");
 
                 Intent bundle = new Intent();
                 bundle.putExtra(FoodSyncService.KEY_JOB_TYPE, FoodSyncService.TYPE_PROMO);
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity
                         FoodSyncService.class, FoodSyncService.jobId,
                         bundle);
             } else {
-                Log.d("FIREBASE", "Current data: null");
+                Timber.d("Current data: null");
             }
 
         });

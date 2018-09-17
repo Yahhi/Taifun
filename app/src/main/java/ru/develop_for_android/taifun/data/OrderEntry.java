@@ -9,7 +9,6 @@ import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,18 +30,18 @@ public class OrderEntry {
     private static final int statusProcessedTime = 25;
     private static final int statusReadyTime = 5;
     public static final int STATUS_READY_TO_PICKUP = 4;
-    public static final int STATUS_IN_DELIVERY = 5;
+    private static final int STATUS_IN_DELIVERY = 5;
     public static final int STATUS_FINISHED = 10;
-    public static final int STATUS_SCHEDULED = 11;
+    private static final int STATUS_SCHEDULED = 11;
 
     public static final int UNFINISHED_ORDER_ID = 100;
 
     public static final int NO_DELIVERY = -100;
 
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey
     int id;
     @ColumnInfo(name = "global_number")
-    long globalNumber;
+    String globalNumber;
     @ColumnInfo(name = "date_stamp")
     Long dateStamp;
     @ColumnInfo(name = "schedule_stamp")
@@ -179,15 +178,14 @@ public class OrderEntry {
                 preferences.getString(MyInfoViewModel.PHONE_KEY, ""), "");
         order.id = UNFINISHED_ORDER_ID;
         order.status = STATUS_NEW;
-        Log.i("FOOD", order.toString());
         return order;
     }
 
-    public long getGlobalNumber() {
+    public String getGlobalNumber() {
         return globalNumber;
     }
 
-    void setGlobalNumber(long globalNumber) {
+    public void setGlobalNumber(String globalNumber) {
         this.globalNumber = globalNumber;
     }
 
