@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import ru.develop_for_android.taifun.data.AppDatabase;
-import ru.develop_for_android.taifun.data.OrderEntry;
+import ru.develop_for_android.taifun_data.AppDatabase;
+import ru.develop_for_android.taifun_data.OrderEntry;
 
 public class OrderStatusActivity extends AppCompatActivity {
 

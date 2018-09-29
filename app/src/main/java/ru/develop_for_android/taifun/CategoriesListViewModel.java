@@ -9,9 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ru.develop_for_android.taifun.data.AppDatabase;
-import ru.develop_for_android.taifun.data.CategoryEntry;
-import ru.develop_for_android.taifun.data.FoodWithIngredients;
+import ru.develop_for_android.taifun_data.AppDatabase;
+import ru.develop_for_android.taifun_data.CategoryEntry;
+import ru.develop_for_android.taifun_data.FoodWithIngredients;
 
 public class CategoriesListViewModel extends AndroidViewModel {
     LiveData<List<CategoryEntry>> categories;
@@ -23,7 +23,7 @@ public class CategoriesListViewModel extends AndroidViewModel {
         categories = AppDatabase.getInstance(getApplication()).foodDao().getCategories();
     }
 
-    public LiveData<List<FoodWithIngredients>> getFoodListForCategory(String categoryId) {
+    LiveData<List<FoodWithIngredients>> getFoodListForCategory(String categoryId) {
         if (!foodListsForFragments.containsKey(categoryId)) {
             foodListsForFragments.put(categoryId, AppDatabase.getInstance(getApplication())
                     .foodDao().getFoodInCategory(categoryId));

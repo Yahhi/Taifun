@@ -10,10 +10,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 
 import ru.develop_for_android.taifun.AppExecutors;
-import ru.develop_for_android.taifun.data.AppDatabase;
-import ru.develop_for_android.taifun.data.CategoryEntry;
-import ru.develop_for_android.taifun.data.FoodEntry;
-import ru.develop_for_android.taifun.data.PromoEntry;
+import ru.develop_for_android.taifun_data.AppDatabase;
+import ru.develop_for_android.taifun_data.CategoryEntry;
+import ru.develop_for_android.taifun_data.FoodEntry;
+import ru.develop_for_android.taifun_data.PromoEntry;
 import timber.log.Timber;
 
 public class FoodSyncService extends JobIntentService {

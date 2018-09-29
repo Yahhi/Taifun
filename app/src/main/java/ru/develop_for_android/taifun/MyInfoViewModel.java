@@ -10,13 +10,14 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
-import ru.develop_for_android.taifun.data.AddressEntry;
-import ru.develop_for_android.taifun.data.AppDatabase;
+import ru.develop_for_android.taifun_data.AddressEntry;
+import ru.develop_for_android.taifun_data.AppDatabase;
+
+import static ru.develop_for_android.taifun_data.AppDatabase.DEFAULT_ADDRESS_ID_KEY;
+import static ru.develop_for_android.taifun_data.AppDatabase.NAME_KEY;
+import static ru.develop_for_android.taifun_data.AppDatabase.PHONE_KEY;
 
 public class MyInfoViewModel extends AndroidViewModel {
-    public static final String NAME_KEY = "name";
-    public static final String PHONE_KEY = "phone";
-    public static final String DEFAULT_ADDRESS_ID_KEY = "address_id";
 
     private String userName;
     private String userPhone;
@@ -39,7 +40,7 @@ public class MyInfoViewModel extends AndroidViewModel {
         return addresses;
     }
 
-    public void setUserName(String userName) {
+    void setUserName(String userName) {
         this.userName = userName;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getApplication());
         SharedPreferences.Editor prefEditor = preferences.edit();
@@ -47,7 +48,7 @@ public class MyInfoViewModel extends AndroidViewModel {
         prefEditor.apply();
     }
 
-    public void setUserPhone(String userPhone) {
+    void setUserPhone(String userPhone) {
         this.userPhone = userPhone;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getApplication());
         SharedPreferences.Editor prefEditor = preferences.edit();
@@ -55,7 +56,7 @@ public class MyInfoViewModel extends AndroidViewModel {
         prefEditor.apply();
     }
 
-    public void setDefaultAddressId(int id) {
+    void setDefaultAddressId(int id) {
         this.defaultAddressId.postValue(id);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getApplication());
         SharedPreferences.Editor prefEditor = preferences.edit();
@@ -63,25 +64,25 @@ public class MyInfoViewModel extends AndroidViewModel {
         prefEditor.apply();
     }
 
-    public MutableLiveData<Integer> getDefaultAddressId() {
+    MutableLiveData<Integer> getDefaultAddressId() {
         return defaultAddressId;
     }
 
-    public String getUserName() {
+    String getUserName() {
         return userName;
     }
 
-    public String getUserPhone() {
+    String getUserPhone() {
         return userPhone;
     }
 
-    public void deleteAddress(AddressEntry address) {
+    void deleteAddress(AddressEntry address) {
 
         AppExecutors.getInstance().diskIO().execute(() -> AppDatabase
                 .getInstance(getApplication()).foodDao().makeAddressInvisible(address));
     }
 
-    public void updateAddress(AddressEntry addressEntry) {
+    void updateAddress(AddressEntry addressEntry) {
         AppExecutors.getInstance().diskIO().execute(() -> AppDatabase.getInstance(getApplication()).foodDao().updateAddress(addressEntry));
     }
 }

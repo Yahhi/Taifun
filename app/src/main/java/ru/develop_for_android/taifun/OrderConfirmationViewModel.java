@@ -16,12 +16,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ru.develop_for_android.taifun.data.AddressEntry;
-import ru.develop_for_android.taifun.data.AppDatabase;
-import ru.develop_for_android.taifun.data.FoodWithCount;
-import ru.develop_for_android.taifun.data.OrderEntry;
-import ru.develop_for_android.taifun.data.OrderWithFood;
+import ru.develop_for_android.taifun_data.AddressEntry;
+import ru.develop_for_android.taifun_data.AppDatabase;
+import ru.develop_for_android.taifun_data.FoodWithCount;
+import ru.develop_for_android.taifun_data.OrderEntry;
+import ru.develop_for_android.taifun_data.OrderWithFood;
 import timber.log.Timber;
+
+import static ru.develop_for_android.taifun_data.AppDatabase.DEFAULT_ADDRESS_ID_KEY;
+import static ru.develop_for_android.taifun_data.AppDatabase.NAME_KEY;
+import static ru.develop_for_android.taifun_data.AppDatabase.PHONE_KEY;
 
 public class OrderConfirmationViewModel extends AndroidViewModel {
 
@@ -44,7 +48,7 @@ public class OrderConfirmationViewModel extends AndroidViewModel {
 
         selectedAddressId = new MutableLiveData<>();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getApplication());
-        selectedAddressId.postValue(preferences.getInt(MyInfoViewModel.DEFAULT_ADDRESS_ID_KEY, -100));
+        selectedAddressId.postValue(preferences.getInt(DEFAULT_ADDRESS_ID_KEY, -100));
 
         selectedAddress = Transformations.switchMap(selectedAddressId,
                 id -> AppDatabase.getInstance(getApplication()).foodDao().getAddress(id));
@@ -52,7 +56,7 @@ public class OrderConfirmationViewModel extends AndroidViewModel {
         networkResult = new MutableLiveData<>();
     }
 
-    public void finishOrder(String additionalInfo, Date schedule) {
+    void finishOrder(String additionalInfo, Date schedule) {
         if (selectedAddressId.getValue() == null) {
             networkResult.postValue(getApplication().getString(R.string.no_selected_address));
             return;
@@ -72,8 +76,8 @@ public class OrderConfirmationViewModel extends AndroidViewModel {
             order.setScheduleStamp(schedule.getTime());
         }
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getApplication());
-        order.setPerson(preferences.getString(MyInfoViewModel.NAME_KEY, "-"));
-        order.setPhone(preferences.getString(MyInfoViewModel.PHONE_KEY, "-"));
+        order.setPerson(preferences.getString(NAME_KEY, "-"));
+        order.setPhone(preferences.getString(PHONE_KEY, "-"));
 
         String address;
         if (selectedAddressId.getValue() == OrderEntry.NO_DELIVERY) {

@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import ru.develop_for_android.taifun.data.AddressEntry;
+import ru.develop_for_android.taifun_data.AddressEntry;
 
 public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.ViewHolder> {
 
@@ -22,7 +22,7 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.View
     private AddressChangesListener listener;
     private Context context;
 
-    public AddressesAdapter(Context context, AddressChangesListener listener) {
+    AddressesAdapter(Context context, AddressChangesListener listener) {
         this.listener = listener;
         this.context = context;
     }

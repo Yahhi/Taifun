@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import ru.develop_for_android.taifun.data.OrderWithFood;
+import ru.develop_for_android.taifun_data.OrderWithFood;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> {
 
@@ -19,7 +19,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     private Context context;
     private OrderClickListener listener;
 
-    public OrderAdapter(Context context, OrderClickListener listener) {
+    OrderAdapter(Context context, OrderClickListener listener) {
         this.context = context;
         this.listener = listener;
     }

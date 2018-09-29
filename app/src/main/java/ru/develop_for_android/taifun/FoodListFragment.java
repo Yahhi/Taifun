@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import ru.develop_for_android.taifun.data.FoodWithIngredients;
+import ru.develop_for_android.taifun_data.FoodWithIngredients;
 
 
 /**

@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import java.util.Date;
 
-import ru.develop_for_android.taifun.data.OrderEntry;
+import ru.develop_for_android.taifun_data.OrderEntry;
 
 public class OrderConfirmationActivity extends AppCompatActivity {
 

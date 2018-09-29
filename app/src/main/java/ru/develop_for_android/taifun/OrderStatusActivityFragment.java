@@ -17,9 +17,9 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-import ru.develop_for_android.taifun.data.OrderEntry;
-import ru.develop_for_android.taifun.data.OrderStatusEntry;
-import ru.develop_for_android.taifun.data.OrderWithFood;
+import ru.develop_for_android.taifun_data.OrderEntry;
+import ru.develop_for_android.taifun_data.OrderStatusEntry;
+import ru.develop_for_android.taifun_data.OrderWithFood;
 
 /**
  * A placeholder fragment containing a simple view.

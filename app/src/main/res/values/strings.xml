@@ -27,10 +27,7 @@
     <string name="weight">Weight: %1$d gr.</string>
     <string name="title_activity_order_info">Order Info</string>
     <string name="title_activity_order_confirmation">Order Confirmation</string>
-    <string name="address_title_home">Home</string>
     <string name="no_price">unavailable</string>
-    <string name="order_finished_at">Finished at %1$s</string>
-    <string name="in_progress">In progress (created at %1$s)</string>
     <string name="order_placed">Order placed</string>
     <string name="order_confirmed">Order confirmed</string>
     <string name="order_processed">Order processed</string>

@@ -7,12 +7,12 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.util.List;
 
-import ru.develop_for_android.taifun.data.CategoryEntry;
+import ru.develop_for_android.taifun_data.CategoryEntry;
 
 public class CategoriesAdapter extends FragmentStatePagerAdapter {
     private List<CategoryEntry> categoryEntries;
 
-    public CategoriesAdapter(FragmentManager fm) {
+    CategoriesAdapter(FragmentManager fm) {
         super(fm);
     }
 

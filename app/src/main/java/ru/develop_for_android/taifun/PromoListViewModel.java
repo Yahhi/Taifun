@@ -7,8 +7,8 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
-import ru.develop_for_android.taifun.data.AppDatabase;
-import ru.develop_for_android.taifun.data.PromoEntry;
+import ru.develop_for_android.taifun_data.AppDatabase;
+import ru.develop_for_android.taifun_data.PromoEntry;
 
 public class PromoListViewModel extends AndroidViewModel {
 

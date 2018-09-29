@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import ru.develop_for_android.taifun.data.IngredientEntry;
+import ru.develop_for_android.taifun_data.IngredientEntry;
 
 public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.ViewHolder> {
 
@@ -46,7 +46,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
         private final TextView ingredientTitle;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             ingredientTitle = itemView.findViewById(R.id.ingredient_title);
         }

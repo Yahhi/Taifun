@@ -11,8 +11,8 @@ import java.util.List;
 
 import ru.develop_for_android.taifun.AppExecutors;
 import ru.develop_for_android.taifun.R;
-import ru.develop_for_android.taifun.data.AppDatabase;
-import ru.develop_for_android.taifun.data.FoodEntry;
+import ru.develop_for_android.taifun_data.AppDatabase;
+import ru.develop_for_android.taifun_data.FoodEntry;
 
 public class FoodListWidget extends AppWidgetProvider {
     private static List<FoodEntry> food;

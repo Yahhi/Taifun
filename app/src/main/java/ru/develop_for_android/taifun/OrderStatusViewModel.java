@@ -7,13 +7,13 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
-import ru.develop_for_android.taifun.data.AppDatabase;
-import ru.develop_for_android.taifun.data.OrderStatusEntry;
-import ru.develop_for_android.taifun.data.OrderWithFood;
+import ru.develop_for_android.taifun_data.AppDatabase;
+import ru.develop_for_android.taifun_data.OrderStatusEntry;
+import ru.develop_for_android.taifun_data.OrderWithFood;
 
 public class OrderStatusViewModel extends ViewModel
 {
-    public static final String RESULT_SUCCESS = "success";
+    static final String RESULT_SUCCESS = "success";
     private MutableLiveData<OrderWithFood> order;
     private LiveData<List<OrderStatusEntry>> statuses;
     private AppDatabase database;
@@ -38,11 +38,11 @@ public class OrderStatusViewModel extends ViewModel
         return order;
     }
 
-    public LiveData<List<OrderStatusEntry>> getStatuses() {
+    LiveData<List<OrderStatusEntry>> getStatuses() {
         return statuses;
     }
 
-    public MutableLiveData<String> getNetworkResult() {
+    MutableLiveData<String> getNetworkResult() {
         return networkResult;
     }
 }

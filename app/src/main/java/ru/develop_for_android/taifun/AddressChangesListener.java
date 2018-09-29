@@ -1,6 +1,6 @@
 package ru.develop_for_android.taifun;
 
-import ru.develop_for_android.taifun.data.AddressEntry;
+import ru.develop_for_android.taifun_data.AddressEntry;
 
 public interface AddressChangesListener {
     void deleteAddress(AddressEntry address);

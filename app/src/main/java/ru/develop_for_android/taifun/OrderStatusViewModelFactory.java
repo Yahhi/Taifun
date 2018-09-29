@@ -4,7 +4,7 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
-import ru.develop_for_android.taifun.data.AppDatabase;
+import ru.develop_for_android.taifun_data.AppDatabase;
 
 public class OrderStatusViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     private final AppDatabase databaseInstance;

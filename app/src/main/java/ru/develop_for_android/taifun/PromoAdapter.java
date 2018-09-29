@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-import ru.develop_for_android.taifun.data.PromoEntry;
+import ru.develop_for_android.taifun_data.PromoEntry;
 
 public class PromoAdapter extends RecyclerView.Adapter<PromoAdapter.ViewHolder> {
 

@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-import ru.develop_for_android.taifun.data.FoodWithCount;
+import ru.develop_for_android.taifun_data.FoodWithCount;
 
 public class OrderDetailsFoodAdapter extends RecyclerView.Adapter<OrderDetailsFoodAdapter.ViewHolder> {
 
@@ -27,7 +27,7 @@ public class OrderDetailsFoodAdapter extends RecyclerView.Adapter<OrderDetailsFo
         this.listener = listener;
     }
 
-    public void initializeData(List<FoodWithCount> foodEntries) {
+    void initializeData(List<FoodWithCount> foodEntries) {
         this.food = foodEntries;
         notifyDataSetChanged();
     }

@@ -13,15 +13,15 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-import ru.develop_for_android.taifun.data.FoodWithCount;
-import ru.develop_for_android.taifun.data.OrderWithFood;
+import ru.develop_for_android.taifun_data.FoodWithCount;
+import ru.develop_for_android.taifun_data.OrderWithFood;
 
 public class OrderContentAdapter extends RecyclerView.Adapter<OrderContentAdapter.ViewHolder> {
 
     private List<FoodWithCount> food;
     private Context context;
 
-    public OrderContentAdapter(Context context){
+    OrderContentAdapter(Context context){
         this.context = context;
     }
 
@@ -56,7 +56,7 @@ public class OrderContentAdapter extends RecyclerView.Adapter<OrderContentAdapte
         private final ImageView foodImage;
         private final TextView foodText;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             foodImage = itemView.findViewById(R.id.food_in_order_image);
             foodText = itemView.findViewById(R.id.food_in_order_quantity);

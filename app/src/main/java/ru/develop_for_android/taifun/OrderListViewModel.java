@@ -12,9 +12,9 @@ import android.support.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.develop_for_android.taifun.data.AppDatabase;
-import ru.develop_for_android.taifun.data.OrderEntry;
-import ru.develop_for_android.taifun.data.OrderWithFood;
+import ru.develop_for_android.taifun_data.AppDatabase;
+import ru.develop_for_android.taifun_data.OrderEntry;
+import ru.develop_for_android.taifun_data.OrderWithFood;
 
 public class OrderListViewModel extends AndroidViewModel {
 
@@ -41,7 +41,7 @@ public class OrderListViewModel extends AndroidViewModel {
         return orders;
     }
 
-    public void openOrderInfo(Context context, int orderId) {
+    void openOrderInfo(Context context, int orderId) {
         Intent orderInfoOpener = new Intent(context, OrderStatusActivity.class);
         orderInfoOpener.putExtra(OrderStatusActivity.ORDER_ID_KEY, orderId);
         context.startActivity(orderInfoOpener);

@@ -11,9 +11,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import ru.develop_for_android.taifun.data.AppDatabase;
-import ru.develop_for_android.taifun.data.FoodWithIngredients;
-import ru.develop_for_android.taifun.data.OrderContentEntry;
+import ru.develop_for_android.taifun_data.AppDatabase;
+import ru.develop_for_android.taifun_data.FoodWithIngredients;
+import ru.develop_for_android.taifun_data.OrderContentEntry;
 
 public class FoodInfoActivity extends AppCompatActivity {
 

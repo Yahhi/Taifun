@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">DataStructures</string>
+    <string name="address_title_home">Home</string>
+    <string name="money">$ %1$s</string>
+    <string name="order_finished_at">Finished at %1$s</string>
+    <string name="in_progress">In progress (created at %1$s)</string>
+    <string name="no_price">unavailable</string>
+</resources>

@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import ru.develop_for_android.taifun.data.FoodWithIngredients;
+import ru.develop_for_android.taifun_data.FoodWithIngredients;
 
 
 /**

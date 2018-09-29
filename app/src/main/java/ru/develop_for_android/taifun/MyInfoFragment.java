@@ -20,8 +20,8 @@ import android.widget.EditText;
 
 import java.util.List;
 
-import ru.develop_for_android.taifun.data.AddressEntry;
-import ru.develop_for_android.taifun.data.AppDatabase;
+import ru.develop_for_android.taifun_data.AddressEntry;
+import ru.develop_for_android.taifun_data.AppDatabase;
 
 
 /**

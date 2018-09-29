@@ -4,10 +4,10 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
 
-import ru.develop_for_android.taifun.data.AppDatabase;
-import ru.develop_for_android.taifun.data.FoodWithIngredients;
-import ru.develop_for_android.taifun.data.OrderContentEntry;
-import ru.develop_for_android.taifun.data.OrderEntry;
+import ru.develop_for_android.taifun_data.AppDatabase;
+import ru.develop_for_android.taifun_data.FoodWithIngredients;
+import ru.develop_for_android.taifun_data.OrderContentEntry;
+import ru.develop_for_android.taifun_data.OrderEntry;
 
 public class FoodInfoViewModel extends ViewModel {
 
@@ -27,7 +27,7 @@ public class FoodInfoViewModel extends ViewModel {
         return food;
     }
 
-    public void addFoodToOrder() {
+    void addFoodToOrder() {
         AppExecutors.getInstance().diskIO().execute(() -> {
             if (existingFoodInOrder.getValue() == null) {
                 String categoryId = food.getValue().getCategoryId();
@@ -42,7 +42,7 @@ public class FoodInfoViewModel extends ViewModel {
         });
     }
 
-    public LiveData<OrderContentEntry> getExistingFoodInOrder() {
+    LiveData<OrderContentEntry> getExistingFoodInOrder() {
         return existingFoodInOrder;
     }
 }
