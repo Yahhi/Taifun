@@ -3,8 +3,6 @@ package ru.develop_for_android.taifun;
 import android.app.Application;
 import android.util.Log;
 
-import com.facebook.stetho.Stetho;
-
 import org.jetbrains.annotations.NotNull;
 
 import timber.log.Timber;
@@ -15,7 +13,7 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Stetho.initializeWithDefaults(this);
+        BuildDependentInitialization.initialize(getApplicationContext());
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         } else {
