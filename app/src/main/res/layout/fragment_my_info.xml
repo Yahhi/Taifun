@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MyInfoFragment">
+    android:orientation="vertical">
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/textInputLayout"
@@ -15,6 +12,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
+        android:hint="@string/my_name"
+        app:hintAnimationEnabled="true"
+        app:hintEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -23,7 +23,7 @@
             android:id="@+id/my_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/my_name" />
+            android:inputType="textCapWords" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -33,6 +33,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:hint="@string/my_phone"
+        app:hintAnimationEnabled="true"
+        app:hintEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +45,7 @@
             android:id="@+id/my_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/my_phone" />
+            android:inputType="phone" />
     </android.support.design.widget.TextInputLayout>
 
     <TextView
