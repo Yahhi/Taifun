@@ -86,6 +86,7 @@ public class OrderConfirmationActivity extends AppCompatActivity {
             } else {
                 deliveryAddress.setVisibility(View.VISIBLE);
                 deliveryAddress.setText(addressEntry.getAddressLine1());
+                selectedAddressId = addressEntry.getId();
             }
         });
 

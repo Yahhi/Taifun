@@ -27,8 +27,8 @@ public class MyInfoViewModel extends AndroidViewModel {
     public MyInfoViewModel(@NonNull Application application) {
         super(application);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getApplication());
-        userName = preferences.getString(NAME_KEY, "Name");
-        userPhone = preferences.getString(PHONE_KEY, "Phone");
+        userName = preferences.getString(NAME_KEY, "");
+        userPhone = preferences.getString(PHONE_KEY, "");
         defaultAddressId = new MutableLiveData<>();
         defaultAddressId.postValue(preferences.getInt(DEFAULT_ADDRESS_ID_KEY, -1));
 
